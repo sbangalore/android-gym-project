@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "918312121900",
-    "firebase_url": "https://gymfree-e04ff.firebaseio.com",
-    "project_id": "gymfree-e04ff",
-    "storage_bucket": "gymfree-e04ff.appspot.com"
+    "project_number": "757099469432",
+    "firebase_url": "https://gym-reservation-system-21a6c.firebaseio.com",
+    "project_id": "gym-reservation-system-21a6c",
+    "storage_bucket": "gym-reservation-system-21a6c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:918312121900:android:1f71f523d4c4cbb2920389",
+        "mobilesdk_app_id": "1:757099469432:android:7b78870f951f1771f16b8d",
         "android_client_info": {
           "package_name": "edu.utap.gymfree"
         }
       },
       "oauth_client": [
         {
-          "client_id": "918312121900-uodljlend6mh2btlv4t6k0ol47e4hlsh.apps.googleusercontent.com",
+          "client_id": "757099469432-b1st2iv7va2nku5schhqj7828sc2js3m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.utap.gymfree",
+            "certificate_hash": "ef5f4a4d48751c34833a2e535d61cc4fea2d8fd1"
+          }
+        },
+        {
+          "client_id": "757099469432-g5srg6eb0adehifirh3rhh3sookjbgc6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAcdbh7r0rfQgdQYMPEGoS8iGFcOj4VUNU"
+          "current_key": "AIzaSyC1r93RZmLUeTiD97HSF8o0xdGW3QWlT-0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "918312121900-uodljlend6mh2btlv4t6k0ol47e4hlsh.apps.googleusercontent.com",
+              "client_id": "757099469432-g5srg6eb0adehifirh3rhh3sookjbgc6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
