@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "918312121900",
+    "firebase_url": "https://gymfree-e04ff.firebaseio.com",
+    "project_id": "gymfree-e04ff",
+    "storage_bucket": "gymfree-e04ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918312121900:android:1f71f523d4c4cbb2920389",
+        "android_client_info": {
+          "package_name": "edu.utap.gymfree"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "918312121900-uodljlend6mh2btlv4t6k0ol47e4hlsh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcdbh7r0rfQgdQYMPEGoS8iGFcOj4VUNU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "918312121900-uodljlend6mh2btlv4t6k0ol47e4hlsh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
