@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         // [START auth_fui_create_intent]
         // Choose authentication providers
         val providers = arrayListOf(
-                AuthUI.IdpConfig.EmailBuilder().build())
+                AuthUI.IdpConfig.EmailBuilder().setAllowNewAccounts(false).build())
 
         // Create and launch sign-in intent
         startActivityForResult(
