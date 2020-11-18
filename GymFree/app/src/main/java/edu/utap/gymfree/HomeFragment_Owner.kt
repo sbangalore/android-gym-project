@@ -7,7 +7,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 
-class HomeFragment_Owner : Fragment(R.layout.fragment_home) {
+class HomeFragment_Owner : Fragment(R.layout.fragment_create) {
 }
 //    private val viewModel: MainViewModel by activityViewModels()
 //    private lateinit var locationAdapter: FirestoreLocationAdapter
