@@ -1,29 +1,29 @@
 package edu.utap.gymfree
 
+
+import android.R.attr.password
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-
-
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
-//import kotlinx.android.synthetic.main.content_main.*
-
 private lateinit var auth: FirebaseAuth
-var TAG = "MainActivity"
+var TAG = "XXX-MainActivity"
 private const val RC_SIGN_IN = 123
+private const val OWNER_EMAIL = "owner@example.com"
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,35 +42,28 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         auth = FirebaseAuth.getInstance()
-        createSignInIntent()
+        if (auth.currentUser == null) {
+            createSignInIntent()
+        }
 
         val user = auth.currentUser
-
-        if (user != null) {
-            Log.d(TAG, "USER : $user")
-            Log.d(TAG, "name: ${user.displayName}")
-            Log.d(TAG, "email: ${user.email}")
-        }
-        else {
-            // No user is signed in
-            Log.d(TAG, "NO USER")
-        }
+        Log.d(TAG, "XXX-USER : ${user?.displayName}; ${user?.email}")
     }
 
     private fun createSignInIntent() {
         // [START auth_fui_create_intent]
         // Choose authentication providers
         val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build())
+                AuthUI.IdpConfig.EmailBuilder().build())
 
         // Create and launch sign-in intent
         startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setIsSmartLockEnabled(false)
-                .build(),
-            RC_SIGN_IN)
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .setIsSmartLockEnabled(false)
+                        .build(),
+                RC_SIGN_IN)
         // [END auth_fui_create_intent]
     }
 
@@ -103,10 +96,20 @@ class MainActivity : AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         updateUI(currentUser)
+
+        val tv: TextView = findViewById<TextView>(R.id.text_home)
+        tv.setOnClickListener {
+            auth.signOut()
+            Log.d(TAG, "logout")
+        }
     }
 
-    fun updateUI(currentUser : FirebaseUser?){
-
+    fun updateUI(currentUser: FirebaseUser?){
+        if (currentUser?.email.equals(OWNER_EMAIL)) {
+            Log.i(TAG, "Owner signed in")
+        } else {
+            Log.d(TAG, "NO USER")
+        }
     }
 
 
