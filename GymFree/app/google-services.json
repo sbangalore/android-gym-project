@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "918312121900-5f30boml0pbiut72dfcd5u25hif6le2t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.utap.gymfree",
+            "certificate_hash": "ef5f4a4d48751c34833a2e535d61cc4fea2d8fd1"
+          }
+        },
+        {
           "client_id": "918312121900-uodljlend6mh2btlv4t6k0ol47e4hlsh.apps.googleusercontent.com",
           "client_type": 3
         }
