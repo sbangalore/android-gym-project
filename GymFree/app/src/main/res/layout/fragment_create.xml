@@ -7,16 +7,122 @@
     tools:context=".ui.create.CreateFragment">
 
     <TextView
-        android:id="@+id/text_create"
+        android:id="@+id/createLocationHelperText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="20dp"
+        android:textSize="15dp"
+        android:layout_centerInParent="true"
+        android:text="@string/text_location_name"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/createLocationHelperText"
+        app:layout_constraintTop_toBottomOf="@+id/createLocationHelperText"
+        android:layout_margin="20dp"
+        android:hint="@string/hint_location">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/capacityHelperText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textField"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="20dp"
+        android:textSize="15dp"
+        android:layout_centerInParent="true"
+        android:text="@string/text_location_capacity"
+        />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/slider"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/capacityHelperText"
+        app:layout_constraintStart_toStartOf="@id/capacityHelperText"
+        app:layout_constraintEnd_toEndOf="@+id/capacityHelperText"
+        android:valueFrom="0"
+        android:valueTo="100"
+        android:value="20"
+        android:stepSize="1"
+        android:tooltipText="true"
+        android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+        />
+
+    <TextView
+        android:id="@+id/addressHelperText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/slider"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="20dp"
+        android:textSize="15dp"
+        android:layout_centerInParent="true"
+        android:text="@string/text_location_address"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/addressField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/createLocationHelperText"
+        app:layout_constraintTop_toBottomOf="@+id/addressHelperText"
+        android:layout_margin="20dp"
+        android:hint="@string/hint_address">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/openingTimeHelperText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/createLocationHelperText"
+        app:layout_constraintTop_toBottomOf="@+id/addressField"
+        android:layout_margin="20dp"
+        android:textSize="15dp"
+        android:layout_centerInParent="true"
+        android:text="Set the opening and closing times."
+        />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/sliderOpening"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/openingTimeHelperText"
+        app:layout_constraintStart_toStartOf="@id/capacityHelperText"
+        app:layout_constraintEnd_toEndOf="@+id/capacityHelperText"
+        app:values="@array/initialHours"
+        android:valueFrom="0"
+        android:valueTo="24"
+        android:stepSize="0.5"
+        android:tooltipText="true"
+        android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+        />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/locationNameButton"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Submit"
+        app:layout_constraintEnd_toEndOf="@id/textField"
+        app:layout_constraintTop_toBottomOf="@id/sliderOpening"
+        android:layout_marginTop="20dp"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
