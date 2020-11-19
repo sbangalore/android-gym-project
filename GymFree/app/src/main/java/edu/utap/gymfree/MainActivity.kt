@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 private lateinit var auth: FirebaseAuth
 var TAG = "XXX-MainActivity"
 private const val RC_SIGN_IN = 123
-private const val OWNER_EMAIL = "owner@example.com"
 
 
 class MainActivity : AppCompatActivity() {
@@ -114,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun updateUI(currentUser: FirebaseUser?){
-        if (currentUser?.email.equals(OWNER_EMAIL)) {
+        if (currentUser?.email.equals(resources.getString(R.string.owner_email))) {
             Log.i(TAG, "Owner signed in")
 //            fab.setOnClickListener {
 //                supportFragmentManager
