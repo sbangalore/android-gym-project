@@ -1,5 +1,7 @@
 package edu.utap.gymfree.ui.create
 
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -12,13 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ServerTimestamp
 import edu.utap.gymfree.Location
 import edu.utap.gymfree.R
-import kotlin.properties.Delegates
+import java.util.*
+import kotlin.math.floor
 
 class CreateFragment : Fragment() {
     val TAG = "XXX-CreateFragment"
@@ -110,6 +111,63 @@ class CreateFragment : Fragment() {
                     Log.w(TAG, "Error writing document", e)
                     Toast.makeText(activity?.applicationContext, "Error creating location. Please try again.", Toast.LENGTH_SHORT).show()
                 }
+            // add subcollections
+            // loop for 14 days
+            for(i in 0 until 14){
+                // open and close times
+                val open  = rs.values[0]
+                val close = rs.values[1]
+
+                // calendar instance
+                val cal = Calendar.getInstance()
+
+                // todays date
+                val month = cal.get(Calendar.MONTH) + 1 // calendar months are indexed at 0 (JAN)
+                val day = cal.get(Calendar.DAY_OF_MONTH)
+
+                val sdf = SimpleDateFormat("MM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+
+                // start
+                var t = sdf.parse("$month $day ${open.toInt()}:00:00 EST 2020") // all done
+                // add 30 minutes if you open at X:30
+                if (open % 1 != 0f){
+                    t = sdf.parse("$month $day ${open.toInt()}:30:00 EST 2020")
+                }
+
+                cal.time = t
+                // add by the day we are on
+                cal.add(Calendar.DATE, i)
+                var startTime = sdf.format(cal.time)
+                Log.d(TAG, "time: ${cal.time}")
+                // add one hour
+                cal.add(Calendar.HOUR, 1)
+                var endTime = sdf.format(cal.time)
+                val numSlots = floor(close - open)
+                Log.d(TAG, "START: $startTime")
+                Log.d(TAG, "END: $endTime")
+                for (i in 0 until numSlots.toInt()){
+                    val stamp1 = mapOf(
+                            "startTime" to startTime,
+                            "endTime" to endTime,
+                            "rowId" to db.collection("timeslots").document().id
+                    )
+                    // add subcollection timeslot
+                    db
+                            .collection("locations")
+                            .document(location.rowID)
+                            .collection("timeslots")
+                            .add(stamp1)
+                    // increment one hour
+                    startTime = endTime
+                    cal.add(Calendar.HOUR, 1)
+                    endTime = sdf.format(cal.time)
+
+                    Log.d(TAG, "START: $startTime")
+                    Log.d(TAG, "END: $endTime")
+
+                }
+            }
+
         }
     }
 }
