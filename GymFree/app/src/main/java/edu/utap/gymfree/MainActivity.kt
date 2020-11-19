@@ -104,12 +104,6 @@ class MainActivity : AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         updateUI(currentUser)
-
-        val tv: TextView = findViewById<TextView>(R.id.text_dashboard)
-        tv.setOnClickListener {
-            auth.signOut()
-            Log.d(TAG, "logout")
-        }
     }
 
     fun updateUI(currentUser: FirebaseUser?){
