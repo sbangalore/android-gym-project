@@ -9,4 +9,5 @@
     <string name="text_location_name">Select a title for this location. Your members will be able to see the title of the gym.</string>
     <string name="text_location_capacity"> Choose the capacity for this location. The capacity is the maximum number of members that may use the gym per hour.</string>
     <string name="text_location_address"> Write down the address of the location, including the street number, street name, and city.</string>
+    <string name="owner_email">owner@example.com</string>
 </resources>
