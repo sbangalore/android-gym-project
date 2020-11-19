@@ -1,6 +1,7 @@
 package edu.utap.gymfree.ui.dashboard
 
 import android.icu.text.SimpleDateFormat
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -52,12 +53,12 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
                                  closeTV: TextView
         ) {
             Log.i("XXX-ADAPTER-bindels", item.toString())
-            userTV.text = item.name
-            addressTV.text = item.address.toString()
-            capacityTV.text = item.capacity.toString()
-            openTV.text = item.openingTime.toString()
-            closeTV.text = item.closingTime.toString()
-            timeTV.text = item.timeStamp.toString()
+            userTV.text = Html.fromHtml(item.name)
+            addressTV.text = Html.fromHtml("<b>Address</b>: " + item.address.toString())
+            capacityTV.text = Html.fromHtml("<b>Capacity</b>: " + item.capacity?.toInt().toString())
+            openTV.text = Html.fromHtml("<b>Opening time</b>: " + item.openingTime.toString())
+            closeTV.text = Html.fromHtml("<b>Closing time</b>: " +  item.closingTime.toString())
+            timeTV.text = Html.fromHtml("<b>Created on</b>: " + dateFormat.format(item.timeStamp?.toDate()).toString())
 
             userTV.visibility = View.VISIBLE
             addressTV.visibility = View.VISIBLE
