@@ -20,6 +20,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import edu.utap.gymfree.ui.create.CreateFragment
+import kotlinx.android.synthetic.main.activity_main.*
+
 private lateinit var auth: FirebaseAuth
 var TAG = "XXX-MainActivity"
 private const val RC_SIGN_IN = 123
@@ -39,9 +42,13 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_dashboard, R.id.navigation_chat, R.id.navigation_chat))
+                R.id.navigation_dashboard, R.id.navigation_create, R.id.navigation_chat))
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        fab.setOnClickListener {
+            navController.navigate(R.id.navigation_create)
+        }
 
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser == null) {
@@ -109,6 +116,13 @@ class MainActivity : AppCompatActivity() {
     fun updateUI(currentUser: FirebaseUser?){
         if (currentUser?.email.equals(OWNER_EMAIL)) {
             Log.i(TAG, "Owner signed in")
+//            fab.setOnClickListener {
+//                supportFragmentManager
+//                    .beginTransaction()
+//                    .add(R.id.nav_host_fragment, CreateFragment.newInstance())
+//                    .addToBackStack(null)
+//                    .commit()
+//            }
         } else {
             Log.d(TAG, "NO USER")
         }

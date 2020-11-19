@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
+        android:id="@+id/navigation_create"
+        android:name="edu.utap.gymfree.ui.create.CreateFragment"
+        android:label="Create"
+        tools:layout="@layout/fragment_create" />
+
+    <fragment
         android:id="@+id/navigation_chat"
         android:name="edu.utap.gymfree.ui.chat.ChatFragment"
         android:label="Chat"
