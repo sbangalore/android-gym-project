@@ -50,9 +50,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         auth = FirebaseAuth.getInstance()
-        if (auth.currentUser == null) {
-            createSignInIntent()
-        }
+//        if (auth.currentUser == null) {
+//            createSignInIntent()
+//        }
+        createSignInIntent()
 
         val user = auth.currentUser
         Log.d(TAG, "XXX-USER : ${user?.displayName}; ${user?.email}")
