@@ -32,6 +32,19 @@ class DashboardViewModel : ViewModel() {
         return locations
     }
 
+    fun deleteLocation(location: Location) {
+        db.collection("locations")
+                .document(location.rowID)
+                .delete()
+                .addOnSuccessListener {
+                    Log.d(javaClass.simpleName, "Deleted ${location.name}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(javaClass.simpleName, "Error deleting document", e)
+                }
+    }
+
+
     fun getLocations() {
         Log.i(TAG, FirebaseAuth.getInstance().currentUser?.email)
         if (!FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
