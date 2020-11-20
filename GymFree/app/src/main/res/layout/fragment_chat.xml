@@ -23,35 +23,33 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRV"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:layout_weight="1"
         android:textAlignment="center"
         android:textSize="16sp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/separator"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/colorPrimaryDark"
         android:id="@+id/separator"
-        app:layout_constraintBottom_toTopOf="@+id/enterTextLL"
+        app:layout_constraintBottom_toTopOf="@+id/composePreviewIV"
         app:layout_constraintTop_toBottomOf="@+id/chatRV"
         />
-
-<!--    <ImageView-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/composePreviewIV"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/chatRV"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/enterTextLL"-->
-<!--        />-->
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/composePreviewIV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chatRV"
+        app:layout_constraintBottom_toTopOf="@id/enterTextLL"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

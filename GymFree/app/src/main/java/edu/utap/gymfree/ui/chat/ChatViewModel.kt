@@ -142,7 +142,6 @@ class ChatViewModel : ViewModel() {
                     it.toObject(ChatRow::class.java)
                 }
             }
-
     }
 
     /////////////////////////////////////////////////////////////

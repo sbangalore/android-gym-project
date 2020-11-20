@@ -45,16 +45,16 @@ class ChatFragment : Fragment() {
 
 
 
-    private fun scrollToEnd() =
-        (chatAdapter.itemCount - 1).takeIf { it > 0 }?.let(chatRV::smoothScrollToPosition)
+//    private fun scrollToEnd() =
+//        (chatAdapter.itemCount - 1).takeIf { it > 0 }?.let(chatRV::smoothScrollToPosition)
     private fun initRecyclerView()  {
         chatAdapter = FirestoreChatAdapter(chatViewModel)
         chatRV.adapter = chatAdapter
         chatRV.layoutManager = LinearLayoutManager(context)
         //https://stackoverflow.com/questions/26580723/how-to-scroll-to-the-bottom-of-a-recyclerview-scrolltoposition-doesnt-work
-        chatRV.viewTreeObserver.addOnGlobalLayoutListener {
-            scrollToEnd()
-        }
+//        chatRV.viewTreeObserver.addOnGlobalLayoutListener {
+//            scrollToEnd()
+//        }
         // Dividers not so nice in chat
     }
     private fun clearCompose() {
