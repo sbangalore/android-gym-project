@@ -126,6 +126,7 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
 
             guestList.setOnClickListener {
                 Log.i(TAG, "get details")
+                guestList.text = "Hide Details"
                 // maybe here we expand id on hourly basis in a recycler view
                 // then, we make a button visible to see the guest list for the next hour
             }
