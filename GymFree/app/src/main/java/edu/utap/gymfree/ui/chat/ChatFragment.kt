@@ -72,15 +72,6 @@ class ChatFragment : Fragment() {
             currentUser = it
         })
 
-        // init sender, receiver, member
-//        if (!currentUser?.email.equals(OWNER_EMAIL)){
-//            memberUid = currentUser?.uid
-//            receiverUid = OWNER_UID
-//        }
-//        else{
-//            // member is who you are sending to
-//            // receiver is the same as member
-//        }
     }
     // For our phone, translate dp to pixels
     private fun dpToPx(dp: Int): Int {
