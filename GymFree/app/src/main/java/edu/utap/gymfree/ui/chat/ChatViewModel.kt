@@ -78,16 +78,19 @@ class ChatViewModel : ViewModel() {
                 "saveChatRow ownerUid(%s) name(%s) %s",
                 chatRow.ownerUid,
                 chatRow.name,
-                chatRow.message
+                chatRow.message,
+                chatRow.receiverName,
+                chatRow.receiverUid,
+                chatRow.memberUid
             )
         )
 
         // XXX Write me.
         // https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document
         // Remember to set the rowID of the chatRow before saving it
-        chatRow.rowID = db.collection("memberChat").document().id
+        chatRow.rowID = db.collection("globalChat").document().id
 
-        db.collection("memberChat")
+        db.collection("globalChat")
             .document(chatRow.rowID)
             .set(chatRow)
             .addOnSuccessListener {
@@ -107,7 +110,7 @@ class ChatViewModel : ViewModel() {
         Log.d(javaClass.simpleName, "remote chatRow id: ${chatRow.rowID}")
 
         // XXX delete chatRow
-        db.collection("memberChat").document(chatRow.rowID).delete()
+        db.collection("globalChat").document(chatRow.rowID).delete()
             .addOnSuccessListener {
                 Log.d(javaClass.simpleName, "Delete Row Success: ${chatRow.rowID}")
             }
@@ -122,26 +125,38 @@ class ChatViewModel : ViewModel() {
     }
 
     fun getChat() {
-        if(FirebaseAuth.getInstance().currentUser == null) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if(user == null) {
             Log.d(javaClass.simpleName, "Can't get chat, no one is logged in")
             chat.value = listOf()
             return
         }
-        // XXX Write me.  Limit total number of chat rows to 100
-        db.collection("memberChat")
-            .orderBy("timeStamp")
-            .limit(100)
-            .addSnapshotListener { querySnapshot, ex ->
-                if (ex != null) {
-                    Log.w(TAG, "listen:error", ex)
-                    return@addSnapshotListener
-                }
+        // get chat for member
+        if (!user.email.equals(OWNER_EMAIL)) {
+            Log.d(TAG, "getChat: MEMBER CHAT")
+            Log.d(TAG, "getChat: ${user.uid}")
+            // XXX Write me.  Limit total number of chat rows to 100
+            db.collection("globalChat")
+                    .whereEqualTo("memberUid", user.uid)
+                    .orderBy("timeStamp")
+                    .limit(100)
+                    .addSnapshotListener { querySnapshot, ex ->
+                        if (ex != null) {
+                            Log.w(TAG, "listen:error", ex)
+                            return@addSnapshotListener
+                        }
 
-                Log.d(TAG, "fetch ${querySnapshot!!.documents.size}")
-                chat.value = querySnapshot.documents.mapNotNull {
-                    it.toObject(ChatRow::class.java)
-                }
-            }
+                        Log.d(TAG, "fetch ${querySnapshot!!.documents.size}")
+                        chat.value = querySnapshot.documents.mapNotNull {
+                            it.toObject(ChatRow::class.java)
+                        }
+                        Log.d(TAG, "getChat: ${chat.value}")
+                    }
+        }
+        else{
+            // XXX owner chat query goes here
+            Log.d(TAG, "getChat: OWNER CHAT")
+        }
     }
 
     /////////////////////////////////////////////////////////////

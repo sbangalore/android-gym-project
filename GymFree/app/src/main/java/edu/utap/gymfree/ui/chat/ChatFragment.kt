@@ -27,7 +27,10 @@ class ChatFragment : Fragment() {
     private lateinit var chatAdapter: FirestoreChatAdapter
     private var currentUser: FirebaseUser? = null
     private var fragmentUUID: String? = null
-
+    private var receiverUid: String? = null
+    private val OWNER_EMAIL = "owner@example.com"
+    private val OWNER_UID = "x3or1FXSFFNyylZZeq4BkQnG3sf2"
+    private var memberUid: String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,6 +71,16 @@ class ChatFragment : Fragment() {
         chatViewModel.observeFirebaseAuthLiveData().observe(viewLifecycleOwner, Observer {
             currentUser = it
         })
+
+        // init sender, receiver, member
+//        if (!currentUser?.email.equals(OWNER_EMAIL)){
+//            memberUid = currentUser?.uid
+//            receiverUid = OWNER_UID
+//        }
+//        else{
+//            // member is who you are sending to
+//            // receiver is the same as member
+//        }
     }
     // For our phone, translate dp to pixels
     private fun dpToPx(dp: Int): Int {
@@ -82,9 +95,23 @@ class ChatFragment : Fragment() {
                     val cUser = currentUser
                     if(cUser == null) {
                         name = "unknown"
+                        receiverName = "unknown"
                         ownerUid = "unknown"
+                        receiverUid = "unknown"
+                        memberUid = "unknown"
                         Log.d("ChatFragment", "XXX, currentUser null!")
                     } else {
+                        // XXX Owner chat information goes here
+                        receiverUid = "USER TO SEND TO"
+                        receiverName = "USER TO SEND TO"
+                        memberUid = "USER TO SEND TO"
+
+                        // Member chat information
+                        if (!cUser.email.equals(OWNER_EMAIL)){
+                            receiverUid = OWNER_UID
+                            receiverName = "Owner"
+                            memberUid = cUser.uid
+                        }
                         name = cUser.displayName
                         ownerUid = cUser.uid
                     }
