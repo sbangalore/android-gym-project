@@ -25,6 +25,7 @@ import com.google.firebase.auth.PlayGamesAuthProvider
 
 import com.google.firebase.ktx.Firebase
 import edu.utap.gymfree.R
+import edu.utap.gymfree.ui.book.SelectFragment
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 
@@ -32,6 +33,8 @@ class DashboardFragment : Fragment() {
     private val TAG = "XXX-DashboardFragment"
     private val viewModel: DashboardViewModel by activityViewModels()
     private lateinit var locationAdapter: FireStoreLocationAdapter
+    private val OWNER_EMAIL = "owner@example.com"
+
 
     private fun initRecyclerView()  {
         locationAdapter = FireStoreLocationAdapter(viewModel)
@@ -50,8 +53,10 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initRecyclerView()
         viewModel.getLocations()
+
 
         viewModel.observeLocations().observe(viewLifecycleOwner, Observer {
             Log.d(javaClass.simpleName, "Observe Chat $it")
@@ -93,7 +98,7 @@ class DashboardFragment : Fragment() {
             } else {
                 Log.i(TAG,"Do this properly...")
                 Toast.makeText(activity?.applicationContext, "Removed $emailToRemove.", Toast.LENGTH_SHORT).show()
-                FirebaseAuth.getInstance().r
+//                FirebaseAuth.getInstance().r
             }
         }
     }

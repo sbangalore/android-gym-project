@@ -1,4 +1,4 @@
-package edu.utap.gymfree.ui.dashboard
+package edu.utap.gymfree.ui.book
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -12,7 +12,7 @@ import edu.utap.gymfree.Location
 import edu.utap.gymfree.MainActivity
 import edu.utap.gymfree.R
 
-class DashboardViewModel : ViewModel() {
+class SelectViewModel : ViewModel() {
     private val TAG = "XXX-DashboardViewModel"
     private val OWNER_EMAIL = "owner@example.com"
 
@@ -27,31 +27,15 @@ class DashboardViewModel : ViewModel() {
     fun myUid(): String? {
         return firebaseAuthLiveData.value?.uid
     }
-    fun emailUid(): String? {
-        return firebaseAuthLiveData.value?.email
-    }
 
     fun observeLocations(): LiveData<List<Location>> {
         return locations
     }
 
-    fun deleteLocation(location: Location) {
-        db.collection("locations")
-                .document(location.rowID)
-                .delete()
-                .addOnSuccessListener {
-                    Log.d(javaClass.simpleName, "Deleted ${location.name}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(javaClass.simpleName, "Error deleting document", e)
-                }
-    }
-
-
     fun getLocations() {
         Log.i(TAG, FirebaseAuth.getInstance().currentUser?.email)
-        if (!FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
-            Log.i(TAG, "Owner not logged in.")
+        if (FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
+            Log.i(TAG, "Owner is logged in")
             locations.value = listOf()
             return
         } else {

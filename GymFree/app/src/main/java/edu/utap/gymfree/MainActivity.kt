@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -20,12 +21,19 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import edu.utap.gymfree.ui.book.SelectFragment
+import edu.utap.gymfree.ui.chat.ChatFragment
 import edu.utap.gymfree.ui.create.CreateFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import androidx.navigation.NavGraph
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.NavController
+
 
 private lateinit var auth: FirebaseAuth
 var TAG = "XXX-MainActivity"
 private const val RC_SIGN_IN = 123
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +44,24 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.background = null
         navView.menu.getItem(1).isEnabled = false
+
+        auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        Log.d(TAG, "XXX-USER : ${user?.displayName}; ${user?.email}")
+
+        val myNavHostFragment: NavHostFragment = nav_host_fragment as NavHostFragment
+        val inflater = myNavHostFragment.navController.navInflater
+
+        var graph = inflater.inflate(R.navigation.mobile_navigation)
+        if(user?.email != "owner@example.com"){
+            graph = inflater.inflate(R.navigation.mobile_navigation_member)
+            Log.d(TAG, "XXX - WE ARE IN MEMBER")
+        }
+        else{
+            Log.d(TAG, "XXX - WE ARE IN OWNER")
+        }
+        myNavHostFragment.navController.graph = graph
+
 
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -49,14 +75,14 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.navigation_create)
         }
 
-        auth = FirebaseAuth.getInstance()
+
 //        if (auth.currentUser == null) {
 //            createSignInIntent()
 //        }
         createSignInIntent()
 
-        val user = auth.currentUser
-        Log.d(TAG, "XXX-USER : ${user?.displayName}; ${user?.email}")
+
+
     }
 
     private fun createSignInIntent() {
@@ -110,6 +136,8 @@ class MainActivity : AppCompatActivity() {
     fun updateUI(currentUser: FirebaseUser?){
         if (currentUser?.email.equals(resources.getString(R.string.owner_email))) {
             Log.i(TAG, "Owner signed in")
+
+
 //            fab.setOnClickListener {
 //                supportFragmentManager
 //                    .beginTransaction()
@@ -117,8 +145,13 @@ class MainActivity : AppCompatActivity() {
 //                    .addToBackStack(null)
 //                    .commit()
 //            }
+
         } else {
-            Log.d(TAG, "NO USER")
+//            Log.d(TAG, "member user")
+//            supportFragmentManager
+//                    .beginTransaction()
+//                    .replace(R.id.nav_host_fragment, SelectFragment.newInstance())
+//                    .commit()
         }
     }
 
