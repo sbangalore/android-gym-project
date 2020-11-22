@@ -1,11 +1,11 @@
 package edu.utap.gymfree.ui.book
 
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -26,24 +26,34 @@ import com.google.firebase.auth.PlayGamesAuthProvider
 
 import com.google.firebase.ktx.Firebase
 import edu.utap.gymfree.R
-import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.android.synthetic.main.fragment_select_locations.*
-import kotlinx.android.synthetic.main.row_select_location.*
+import kotlinx.android.synthetic.main.fragment_timeslots.*
+import kotlinx.android.synthetic.main.row_timeslot.*
 
 
-class SelectFragment : Fragment() {
-    private val TAG = "XXX-DashboardFragment"
-    private val viewModel: SelectViewModel by activityViewModels()
-    private lateinit var selectAdapter: SelectAdapter
+class TimeslotFragment : Fragment() {
+    private val TAG = "XXX-TimeslotFragment"
+    private val viewModel: TimeslotViewModel by activityViewModels()
+    private lateinit var TimeslotAdapter: TimeslotAdapter
 
     companion object {
-        fun newInstance() = SelectFragment()
+        fun newInstance(locationID: String): TimeslotFragment {
+            val fragment = TimeslotFragment()
+
+            val bundle = Bundle().apply {
+                putString("locationID", locationID)
+            }
+
+            fragment.arguments = bundle
+
+            return fragment
+        }
     }
 
     private fun initRecyclerView()  {
-        selectAdapter = SelectAdapter(viewModel)
-        selectRV.adapter = selectAdapter
-        selectRV.layoutManager = LinearLayoutManager(context)
+        TimeslotAdapter = TimeslotAdapter(viewModel)
+
+        timeslotRV.adapter = TimeslotAdapter
+        timeslotRV.layoutManager = LinearLayoutManager(context)
     }
 
     override fun onCreateView(
@@ -51,20 +61,20 @@ class SelectFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-
-        val root = inflater.inflate(R.layout.fragment_select_locations, container, false)
+        val root = inflater.inflate(R.layout.fragment_timeslots, container, false)
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        viewModel.getLocations()
 
+        val locationID = arguments?.getString("locationID")!!
+        viewModel.getLocations(locationID)
         viewModel.observeLocations().observe(viewLifecycleOwner, Observer {
             Log.d(javaClass.simpleName, "Observe Chat $it")
             Log.i("XXX-DBFragment", it.toString())
-            selectAdapter.submitList(it)
+            TimeslotAdapter.submitList(it)
         })
 
 
@@ -72,6 +82,7 @@ class SelectFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.getLocations()
+        val locationID = arguments?.getString("locationID")!!
+        viewModel.getLocations(locationID)
     }
 }

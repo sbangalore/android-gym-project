@@ -9,31 +9,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import edu.utap.gymfree.Location
+import edu.utap.gymfree.ui.book.Timeslot
 import edu.utap.gymfree.R
 import kotlinx.coroutines.delay
 
-class SelectAdapter(private var viewModel: SelectViewModel)
-    : ListAdapter<Location, SelectAdapter.VH>(Diff()) {
-    private val TAG = "Select adapter"
+class TimeslotAdapter(private var viewModel: TimeslotViewModel)
+    : ListAdapter<Timeslot, TimeslotAdapter.VH>(Diff()) {
+    private val TAG = "Timeslot adapter"
     // This class allows the adapter to compute what has changed
-    class Diff : DiffUtil.ItemCallback<Location>() {
-        override fun areItemsTheSame(oldItem: Location, newItem: Location): Boolean {
+    class Diff : DiffUtil.ItemCallback<Timeslot>() {
+        override fun areItemsTheSame(oldItem: Timeslot, newItem: Timeslot): Boolean {
             return oldItem.rowID == newItem.rowID
         }
 
-        override fun areContentsTheSame(oldItem: Location, newItem: Location): Boolean {
-            return oldItem.name == newItem.name
-                    && oldItem.ownerUid == newItem.ownerUid
-                    && oldItem.pictureUUID == newItem.pictureUUID
-                    && oldItem.address == newItem.address
-                    && oldItem.capacity?.equals(newItem.capacity) ?: true
-                    && oldItem.timeStamp == newItem.timeStamp
+        override fun areContentsTheSame(oldItem: Timeslot, newItem: Timeslot): Boolean {
+            return oldItem.startTime == newItem.startTime
+                    && oldItem.endTime == newItem.endTime
         }
     }
     companion object {
@@ -44,47 +42,43 @@ class SelectAdapter(private var viewModel: SelectViewModel)
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // May the Lord have mercy upon my soul
 
-        private var rowText = itemView.findViewById<TextView>(R.id.rowText)
-        private var proceedBut = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.proceedBut)
+        private var timeslotText = itemView.findViewById<TextView>(R.id.timeslotText)
+        private var bookBut = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.bookBut)
 
-        private fun bindElements(item: Location,
+
+        private fun bindElements(item: Timeslot,
                                  rowText: TextView,
-                                 proceedBut: com.google.android.material.button.MaterialButton
+                                 bookBut: com.google.android.material.button.MaterialButton
         ) {
             Log.i("XXX-ADAPTER-bindels", item.toString())
-            rowText.text = Html.fromHtml(item.name)
+            val slots = Html.fromHtml(item.startTime).toString() + " " + Html.fromHtml(item.endTime).toString()
+            timeslotText.text = Html.fromHtml(slots)
 
-            proceedBut.setOnClickListener {
-                Log.i(TAG,"Proceed clicked")
-                (itemView.context as FragmentActivity)
-                        .supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.nav_host_fragment, TimeslotFragment.newInstance(item.rowID))
-                            .addToBackStack(null)
-                            .commit()
-
+            bookBut.setOnClickListener {
+                (itemView.context as FragmentActivity).supportFragmentManager.popBackStack()
+                Log.d(TAG, "POPPED")
             }
 
 
             rowText.visibility = View.VISIBLE
         }
 
-        fun bind(item: Location?) {
+        fun bind(item: Timeslot?) {
             if (item == null) {
                 Log.i("XXX-ADAPTER-bind", "NULL!")
                 return
             }
             bindElements(
                     item,
-                    rowText,
-                    proceedBut,
+                    timeslotText,
+                    bookBut,
             )
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.row_select_location, parent, false)
+                .inflate(R.layout.row_timeslot, parent, false)
         //Log.d(MainActivity.TAG, "Create VH")
         return VH(itemView)
     }

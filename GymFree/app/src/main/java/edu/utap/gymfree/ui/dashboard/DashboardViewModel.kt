@@ -49,7 +49,7 @@ class DashboardViewModel : ViewModel() {
 
 
     fun getLocations() {
-        Log.i(TAG, FirebaseAuth.getInstance().currentUser?.email)
+//        Log.i(TAG, FirebaseAuth.getInstance().currentUser?.email)
         if (!FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
             Log.i(TAG, "Owner not logged in.")
             locations.value = listOf()

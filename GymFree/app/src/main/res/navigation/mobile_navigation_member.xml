@@ -7,15 +7,15 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="edu.utap.gymfree.ui.book.SelectFragment"
+        android:name="edu.utap.gymfree.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_select_locations" />
+        tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_create"
-        android:name="edu.utap.gymfree.ui.create.CreateFragment"
+        android:name="edu.utap.gymfree.ui.book.SelectFragment"
         android:label="Create"
-        tools:layout="@layout/fragment_create" />
+        tools:layout="@layout/fragment_select_locations" />
 
     <fragment
         android:id="@+id/navigation_chat"

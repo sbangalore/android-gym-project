@@ -10,7 +10,8 @@
     @drawable/dot for the image named dot.png -->
 
     <TextView
-        android:id="@+id/rowText"
+        android:id="@+id/timeslotText"
+        android:text="8 AM ot 9 AM\nYour Gym Here"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -30,7 +31,7 @@
         android:id="@+id/rowCheck"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/rowText"
+        app:layout_constraintStart_toEndOf="@+id/timeslotText"
         app:layout_constraintEnd_toStartOf="@+id/proceedBut"
         />
     <!--    <ImageView-->
@@ -45,15 +46,16 @@
     <!--        />-->
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/proceedBut"
+        android:id="@+id/bookBut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
-        android:text="Proceed"
+        android:text="Book\n1 remaining"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/rowCheck"
         app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="#6FCF97"
         />
     <View
         android:layout_width="match_parent"

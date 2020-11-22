@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.book.SelectFragment">
+    tools:context=".ui.book.TimeslotFragment">
 
     <LinearLayout
         android:id="@+id/userControls"
@@ -17,12 +17,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Locations which you would like to make reservations for"
+            android:text="Select Timeslot which you would like to book"
             android:textSize="20sp"
             android:layout_margin="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/selectRV"
+            android:id="@+id/timeslotRV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="8dp"
