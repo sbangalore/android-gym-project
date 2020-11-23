@@ -1,7 +1,6 @@
 package edu.utap.gymfree.ui.dashboard
 
 import android.icu.text.SimpleDateFormat
-import android.opengl.Visibility
 import android.os.Handler
 import android.text.Html
 import android.util.Log
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import edu.utap.gymfree.Location
 import edu.utap.gymfree.R
-import kotlinx.coroutines.delay
 
 class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
     : ListAdapter<Location, FireStoreLocationAdapter.VH>(Diff()) {
@@ -35,7 +33,7 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
         }
     }
     companion object {
-        private val dateFormat = SimpleDateFormat("hh:mm dd MMM, yyyy")
+        private val dateFormat = SimpleDateFormat("dd MMM, yyyy / hh:mm")
     }
 
     // ViewHolder pattern minimizes calls to findViewById
@@ -49,7 +47,9 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
         private var closeTV = itemView.findViewById<TextView>(R.id.locationClosingTV)
         private var delBut = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.deleteButton)
         private var delButSure = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.deleteButtonSure)
-        private var guestList = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.detailsButton)
+        private var guestListButton = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.guestListButton)
+        private var guestList = itemView.findViewById<RecyclerView>(R.id.guestList)
+        private var hideGuestListButton = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.hideGuestListButton)
 
         private fun bindElements(item: Location,
                                  userTV: TextView,
@@ -60,7 +60,9 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
                                  closeTV: TextView,
                                  delBut: com.google.android.material.button.MaterialButton,
                                  delButSure: com.google.android.material.button.MaterialButton,
-                                 guestList: com.google.android.material.button.MaterialButton
+                                 guestListButton: com.google.android.material.button.MaterialButton,
+                                 guestList: RecyclerView,
+                                 hideGuestListButton: com.google.android.material.button.MaterialButton
         ) {
             Log.i("XXX-ADAPTER-bindels", item.toString())
             userTV.text = Html.fromHtml(item.name)
@@ -70,21 +72,17 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
             var openingMins = item.openingTime?.minus(item.openingTime?.toInt()!!)?.times(60)?.toInt().toString()
             var closingHour = item.closingTime?.toInt().toString()
             var closingMins = item.closingTime?.minus(item.closingTime?.toInt()!!)?.times(60)?.toInt().toString()
-            if (item.openingTime?.toInt()!! < 10) {
-                openingHour = "0$openingHour"
-            }
+
             if (item.openingTime?.minus(item.openingTime?.toInt()!!)?.times(60)?.toInt()!! < 10) {
                 openingMins = "0$openingMins"
             }
-            if (item.closingTime?.toInt()!! < 10) {
-                closingHour = "0$closingHour"
-            }
+
             if (item.closingTime?.minus(item.closingTime?.toInt()!!)?.times(60)?.toInt()!! < 10) {
                 closingMins = "0$closingMins"
             }
-            openTV.text = Html.fromHtml("<b>Opening</b>: $openingHour:$openingMins")
-            closeTV.text = Html.fromHtml("<b>Closing</b>: $closingHour:$closingMins")
-            timeTV.text = Html.fromHtml("<b>Created on</b>: " + dateFormat.format(item.timeStamp?.toDate()).toString())
+            openTV.text = Html.fromHtml("Opens at  $openingHour:$openingMins")
+            closeTV.text = Html.fromHtml("Closes at $closingHour:$closingMins")
+            timeTV.text = Html.fromHtml("<small>Created on " + dateFormat.format(item.timeStamp?.toDate()).toString() + "<small>")
 
             delBut.setOnClickListener {
                 Log.i(TAG,"longclick - delbut")
@@ -94,9 +92,6 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
                     delBut.visibility = View.VISIBLE
                     delButSure.visibility = View.GONE
                 }, 3000)
-//                Thread.sleep(2000)
-//                delBut.visibility = View.VISIBLE
-//                delButSure.visibility = View.GONE
             }
 
             delBut.setOnLongClickListener {
@@ -107,9 +102,6 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
                     delBut.visibility = View.VISIBLE
                     delButSure.visibility = View.GONE
                 }, 3000)
-//                Thread.sleep(2000)
-//                delBut.visibility = View.VISIBLE
-//                delButSure.visibility = View.GONE
                 true
             }
 
@@ -124,11 +116,17 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
                 true
             }
 
-            guestList.setOnClickListener {
+            guestListButton.setOnClickListener {
                 Log.i(TAG, "get details")
-                guestList.text = "Hide Details"
-                // maybe here we expand id on hourly basis in a recycler view
-                // then, we make a button visible to see the guest list for the next hour
+                guestList.visibility = View.VISIBLE
+                guestListButton.visibility = View.GONE
+                hideGuestListButton.visibility = View.VISIBLE
+            }
+
+            hideGuestListButton.setOnClickListener {
+                guestList.visibility = View.GONE
+                guestListButton.visibility = View.VISIBLE
+                hideGuestListButton.visibility = View.GONE
             }
 
             userTV.visibility = View.VISIBLE
@@ -138,6 +136,8 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
             closeTV.visibility = View.VISIBLE
             timeTV.visibility = View.VISIBLE
             delButSure.visibility = View.GONE
+            guestList.visibility = View.GONE
+            hideGuestListButton.visibility = View.GONE
         }
 
         fun bind(item: Location?) {
@@ -155,7 +155,9 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
                     closeTV,
                     delBut,
                     delButSure,
-                    guestList
+                    guestListButton,
+                    guestList,
+                    hideGuestListButton
             )
         }
     }

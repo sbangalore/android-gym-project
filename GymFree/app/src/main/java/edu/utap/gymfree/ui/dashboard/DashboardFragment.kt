@@ -33,7 +33,6 @@ class DashboardFragment : Fragment() {
     private val TAG = "XXX-DashboardFragment"
     private val viewModel: DashboardViewModel by activityViewModels()
     private lateinit var locationAdapter: FireStoreLocationAdapter
-    private val OWNER_EMAIL = "owner@example.com"
 
 
     private fun initRecyclerView()  {
@@ -98,7 +97,6 @@ class DashboardFragment : Fragment() {
             } else {
                 Log.i(TAG,"Do this properly...")
                 Toast.makeText(activity?.applicationContext, "Removed $emailToRemove.", Toast.LENGTH_SHORT).show()
-//                FirebaseAuth.getInstance().r
             }
         }
     }
