@@ -28,16 +28,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 
 private lateinit var auth: FirebaseAuth
 var TAG = "XXX-MainActivity"
 private const val RC_SIGN_IN = 123
-
+private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -49,18 +50,6 @@ class MainActivity : AppCompatActivity() {
         val user = auth.currentUser
         Log.d(TAG, "XXX-USER : ${user?.displayName}; ${user?.email}")
 
-        val myNavHostFragment: NavHostFragment = nav_host_fragment as NavHostFragment
-        val inflater = myNavHostFragment.navController.navInflater
-
-        var graph = inflater.inflate(R.navigation.mobile_navigation)
-        if(user?.email != "owner@example.com"){
-            graph = inflater.inflate(R.navigation.mobile_navigation_member)
-            Log.d(TAG, "XXX - WE ARE IN MEMBER")
-        }
-        else{
-            Log.d(TAG, "XXX - WE ARE IN OWNER")
-        }
-        myNavHostFragment.navController.graph = graph
 
 
         val navController = findNavController(R.id.nav_host_fragment)
@@ -110,13 +99,45 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "USER : ${auth.currentUser}")
             Log.d(TAG, "name: ${auth.currentUser?.displayName}")
             Log.d(TAG, "email: ${auth.currentUser?.email}")
+            val user = auth.currentUser
+
             val response = IdpResponse.fromResultIntent(data)
+
+            val myNavHostFragment: NavHostFragment = nav_host_fragment as NavHostFragment
+            val inflater = myNavHostFragment.navController.navInflater
+
+            var graph = inflater.inflate(R.navigation.mobile_navigation)
+            if(user?.email != "owner@example.com"){
+                graph = inflater.inflate(R.navigation.mobile_navigation_member)
+                Log.d(TAG, "XXX - WE ARE IN MEMBER")
+            }
+            else{
+                Log.d(TAG, "XXX - WE ARE IN OWNER")
+            }
+            myNavHostFragment.navController.graph = graph
 
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
-                val user = FirebaseAuth.getInstance().currentUser
-                // ...
-            } else {
+                var rowID = db.collection("users").document().id
+                var uid = user?.uid
+
+                val usersData = hashMapOf(
+                        "uid" to user?.uid,
+                        "email" to user?.email,
+                        "name" to user?.displayName,
+                        "rowID" to rowID
+                )
+
+                db
+                        .collection("users")
+                        .document(uid!!)
+                        .set(usersData, SetOptions.merge())
+                        .addOnSuccessListener { Log.d(TAG, "User successfully written!") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
+
+            }
+            else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
