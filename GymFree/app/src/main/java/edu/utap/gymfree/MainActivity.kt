@@ -29,6 +29,7 @@ import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 
 
 private lateinit var auth: FirebaseAuth
@@ -118,6 +119,8 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 var rowID = db.collection("users").document().id
+                var uid = user?.uid
+
                 val usersData = hashMapOf(
                         "uid" to user?.uid,
                         "email" to user?.email,
@@ -127,10 +130,12 @@ class MainActivity : AppCompatActivity() {
 
                 db
                         .collection("users")
-                        .document(rowID)
-                        .set(usersData)
+                        .document(uid!!)
+                        .set(usersData, SetOptions.merge())
                         .addOnSuccessListener { Log.d(TAG, "User successfully written!") }
                         .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
+
             }
             else {
                 // Sign in failed. If response is null the user canceled the

@@ -118,28 +118,28 @@
                     style="?attr/borderlessButtonStyle"
                     />
 
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/guestListButton"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_margin="2dp"-->
-<!--                    android:text="+ Guests"-->
-<!--                    android:layout_weight="1"-->
-<!--                    />-->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/guestListButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:text="+ Guests"
+                    android:layout_weight="1"
+                    />
 
-<!--                <com.google.android.material.button.MaterialButton-->
-<!--                    android:id="@+id/hideGuestListButton"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_margin="2dp"-->
-<!--                    android:text="- Hide"-->
-<!--                    android:layout_weight="1"-->
-<!--                    />-->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/hideGuestListButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:text="- Hide"
+                    android:layout_weight="1"
+                    />
                 </LinearLayout>
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/guestList"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content" />-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/guestList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
