@@ -4,11 +4,15 @@ package edu.utap.gymfree
 import android.R.attr.password
 import android.app.Activity
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Barrier
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -107,6 +111,7 @@ class MainActivity : AppCompatActivity() {
             val inflater = myNavHostFragment.navController.navInflater
 
             var graph = inflater.inflate(R.navigation.mobile_navigation)
+
             if(user?.email != "owner@example.com"){
                 graph = inflater.inflate(R.navigation.mobile_navigation_member)
                 Log.d(TAG, "XXX - WE ARE IN MEMBER")
@@ -124,7 +129,6 @@ class MainActivity : AppCompatActivity() {
                 val usersData = hashMapOf(
                         "uid" to user?.uid,
                         "email" to user?.email,
-                        "name" to user?.displayName,
                         "rowID" to rowID
                 )
 
@@ -134,8 +138,6 @@ class MainActivity : AppCompatActivity() {
                         .set(usersData, SetOptions.merge())
                         .addOnSuccessListener { Log.d(TAG, "User successfully written!") }
                         .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-
-
             }
             else {
                 // Sign in failed. If response is null the user canceled the
