@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.book.SelectFragment">
+    tools:context=".ui.book.SelectFragment"
+    android:background="@color/white">
 
     <LinearLayout
         android:id="@+id/userControls"

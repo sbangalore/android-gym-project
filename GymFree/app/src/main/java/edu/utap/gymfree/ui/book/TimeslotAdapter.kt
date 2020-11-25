@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.findFragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -54,13 +55,15 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
             val slots = Html.fromHtml(item.startTime).toString() + " " + Html.fromHtml(item.endTime).toString()
             timeslotText.text = Html.fromHtml(slots)
 
+            rowText.visibility = View.VISIBLE
+
             bookBut.setOnClickListener {
-                (itemView.context as FragmentActivity).supportFragmentManager.popBackStack()
+                (itemView.context as FragmentActivity)
+                        .supportFragmentManager
+                        .popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 Log.d(TAG, "POPPED")
             }
 
-
-            rowText.visibility = View.VISIBLE
         }
 
         fun bind(item: Timeslot?) {
