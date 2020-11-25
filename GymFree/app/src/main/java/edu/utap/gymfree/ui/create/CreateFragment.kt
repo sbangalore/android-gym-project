@@ -146,17 +146,19 @@ class CreateFragment : Fragment() {
                 Log.d(TAG, "START: $startTime")
                 Log.d(TAG, "END: $endTime")
                 for (i in 0 until numSlots.toInt()){
+                    val tslotID = db.collection("timeslots").document().id
                     val stamp1 = mapOf(
                             "startTime" to startTime,
                             "endTime" to endTime,
-                            "rowId" to db.collection("timeslots").document().id
+                            "rowId" to tslotID
                     )
                     // add subcollection timeslot
                     db
                             .collection("locations")
                             .document(location.rowID)
                             .collection("timeslots")
-                            .add(stamp1)
+                            .document(tslotID)
+                            .set(stamp1)
                     // increment one hour
                     startTime = endTime
                     cal.add(Calendar.HOUR, 1)
