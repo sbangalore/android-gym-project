@@ -60,7 +60,7 @@ class SelectAdapter(private var viewModel: SelectViewModel)
                         .supportFragmentManager
                             .beginTransaction()
                             .replace(R.id.nav_host_fragment, TimeslotFragment.newInstance(item.rowID))
-                            .addToBackStack(null)
+                            .addToBackStack("select")
                             .commit()
 
             }
