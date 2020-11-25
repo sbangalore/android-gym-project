@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import edu.utap.firechat.FirestoreAuthLiveData
@@ -45,6 +46,10 @@ class DashboardViewModel : ViewModel() {
                 .addOnFailureListener { e ->
                     Log.w(javaClass.simpleName, "Error deleting document", e)
                 }
+    }
+
+    fun getCurrentUser(): FirebaseUser? {
+        return FirebaseAuth.getInstance().currentUser
     }
 
 
