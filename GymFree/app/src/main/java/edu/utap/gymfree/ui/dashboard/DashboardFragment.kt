@@ -61,49 +61,52 @@ class DashboardFragment : Fragment() {
         initRecyclerView()
         viewModel.getLocations()
 
-
         viewModel.observeLocations().observe(viewLifecycleOwner, Observer {
             Log.d(javaClass.simpleName, "Observe Chat $it")
             Log.i("XXX-DBFragment", it.toString())
             locationAdapter.submitList(it)
         })
 
-        addUserButton.setOnClickListener {
-            val emailToAdd = addEmail.editText?.text.toString()
-            if (emailToAdd == "") {
-                addEmail.error = "Email is required."
-            }
+        // NOTE: AFAIK, the admin SDK has to be handled through a seperate app entirely
+        //       => we can't remove or add users here
 
-            val settings = ActionCodeSettings.newBuilder()
-                    .setHandleCodeInApp(true)
-                    .setUrl("https://www.google.com/")
-                    .setAndroidPackageName(
-                            "edu.utap.gymfree",
-                            true,
-                            "27"
-                    )
-                    .build()
+//        addUserButton.setOnClickListener {
+//            val emailToAdd = addEmail.editText?.text.toString()
+//            if (emailToAdd == "") {
+//                addEmail.error = "Email is required."
+//            }
+//
+//            val settings = ActionCodeSettings.newBuilder()
+//                    .setHandleCodeInApp(true)
+//                    .setUrl("https://www.google.com/")
+//                    .setAndroidPackageName(
+//                            "edu.utap.gymfree",
+//                            true,
+//                            "27"
+//                    )
+//                    .build()
+//
+//            FirebaseAuth.getInstance().sendSignInLinkToEmail(emailToAdd, settings)
+//                    .addOnCompleteListener { task ->
+//                        if (task.isSuccessful) {
+//                            Log.d(TAG, "Email sent.")
+//                            Toast.makeText(activity?.applicationContext, "Added $emailToAdd.", Toast.LENGTH_SHORT).show()
+//                        }
+//                        }
+//
+//        }
 
-            FirebaseAuth.getInstance().sendSignInLinkToEmail(emailToAdd, settings)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d(TAG, "Email sent.")
-                            Toast.makeText(activity?.applicationContext, "Added $emailToAdd.", Toast.LENGTH_SHORT).show()
-                        }
-                        }
-
-        }
-        removeUserButton.setOnClickListener {
-            val emailToRemove = removeEmail.editText?.text.toString()
-            if (emailToRemove == "") {
-                addEmail.error = "Email is required."
-            } else if (emailToRemove == resources.getString(R.string.owner_email)) {
-                removeEmail.error = "Please contact support to delete your account."
-            } else {
-                Log.i(TAG,"Do this properly...")
-                Toast.makeText(activity?.applicationContext, "Removed $emailToRemove.", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        removeUserButton.setOnClickListener {
+//            val emailToRemove = removeEmail.editText?.text.toString()
+//            if (emailToRemove == "") {
+//                addEmail.error = "Email is required."
+//            } else if (emailToRemove == resources.getString(R.string.owner_email)) {
+//                removeEmail.error = "Please contact support to delete your account."
+//            } else {
+//                Log.i(TAG,"Do this properly...")
+//                Toast.makeText(activity?.applicationContext, "Removed $emailToRemove.", Toast.LENGTH_SHORT).show()
+//            }
+//        }
         // inputfield to add user name
         val user = viewModel.getCurrentUser()
 
