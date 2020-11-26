@@ -110,7 +110,7 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
             }
 
 
-            val dateText = startFormated.month.toString() + "/" +  startFormated.date.toString()
+            val dateText = (startFormated.month + 1).toString() + "/" +  startFormated.date.toString()
             val timeText = startFormated.hours.toString() + ":" + startMinutes + " to " + endFormated.hours.toString() + ":" + endMinutes
 
 
