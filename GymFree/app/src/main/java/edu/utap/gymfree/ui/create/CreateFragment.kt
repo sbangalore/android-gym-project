@@ -28,12 +28,12 @@ class CreateFragment : Fragment() {
     private lateinit var createViewModel: CreateViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         createViewModel =
-            ViewModelProvider(this).get(CreateViewModel::class.java)
+                ViewModelProvider(this).get(CreateViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_create, container, false)
         val tv = root.findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.textField)
         val lb = root.findViewById<com.google.android.material.button.MaterialButton>(R.id.locationNameButton)
@@ -95,22 +95,22 @@ class CreateFragment : Fragment() {
             Log.i(TAG, location.capacity.toString())
 
             db
-                .collection("locations")
-                .document(location.rowID)
-                .set(location)
-                .addOnSuccessListener {
-                    Toast.makeText(
-                        activity?.applicationContext,
-                        "$name successfully created.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    Log.d(TAG, "DocumentSnapshot successfully written!")
-                    activity?.supportFragmentManager?.popBackStack();
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error writing document", e)
-                    Toast.makeText(activity?.applicationContext, "Error creating location. Please try again.", Toast.LENGTH_SHORT).show()
-                }
+                    .collection("locations")
+                    .document(location.rowID)
+                    .set(location)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                                activity?.applicationContext,
+                                "$name successfully created.",
+                                Toast.LENGTH_SHORT
+                        ).show()
+                        Log.d(TAG, "DocumentSnapshot successfully written!")
+                        activity?.supportFragmentManager?.popBackStack();
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(TAG, "Error writing document", e)
+                        Toast.makeText(activity?.applicationContext, "Error creating location. Please try again.", Toast.LENGTH_SHORT).show()
+                    }
             // add subcollections
             // loop for 14 days
             for(i in 0 until 14){

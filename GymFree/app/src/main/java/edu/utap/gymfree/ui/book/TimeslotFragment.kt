@@ -70,19 +70,18 @@ class TimeslotFragment : Fragment() {
         initRecyclerView()
 
         val locationID = arguments?.getString("locationID")!!
-        viewModel.getLocations(locationID)
-        viewModel.observeLocations().observe(viewLifecycleOwner, Observer {
+        viewModel.getTimeslots(locationID)
+        viewModel.observeTimeslots().observe(viewLifecycleOwner, Observer {
             Log.d(javaClass.simpleName, "Observe Chat $it")
             Log.i("XXX-DBFragment", it.toString())
             TimeslotAdapter.submitList(it)
         })
-
 
     }
 
     override fun onResume() {
         super.onResume()
         val locationID = arguments?.getString("locationID")!!
-        viewModel.getLocations(locationID)
+        viewModel.getTimeslots(locationID)
     }
 }
