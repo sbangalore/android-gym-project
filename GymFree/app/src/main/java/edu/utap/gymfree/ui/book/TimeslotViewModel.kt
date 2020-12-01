@@ -117,27 +117,27 @@ class TimeslotViewModel : ViewModel() {
     fun getTimeslots(locationID: String) {
         locID.value = locationID
         Log.i(TAG, FirebaseAuth.getInstance().currentUser?.email)
-        if (FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
-            Log.i(TAG, "Owner is logged in")
-            timeslots.value = listOf()
-            return
-        } else {
-            db
-                .collection("locations")
-                .document(locationID)
-                .collection("timeslots")
-                .orderBy("startTime", Query.Direction.ASCENDING)
-                .addSnapshotListener { querySnapshot, ex ->
-                    if (ex != null) {
-                        Log.w(TAG, "listen:error", ex)
-                        return@addSnapshotListener
-                    }
-                    Log.d(TAG, "fetch ${querySnapshot!!.documents.size}")
-                    timeslots.value = querySnapshot.documents.mapNotNull {
-                        Log.i(TAG + "XXXX", it.data.toString())
-                        it.toObject(Timeslot::class.java)
-                    }
+//        if (FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
+//            Log.i(TAG, "Owner is logged in")
+//            timeslots.value = listOf()
+//            return
+//        } else {
+        db
+            .collection("locations")
+            .document(locationID)
+            .collection("timeslots")
+            .orderBy("startTime", Query.Direction.ASCENDING)
+            .addSnapshotListener { querySnapshot, ex ->
+                if (ex != null) {
+                    Log.w(TAG, "listen:error", ex)
+                    return@addSnapshotListener
                 }
-        }
+                Log.d(TAG, "fetch ${querySnapshot!!.documents.size}")
+                timeslots.value = querySnapshot.documents.mapNotNull {
+                    Log.i(TAG + "XXXX", it.data.toString())
+                    it.toObject(Timeslot::class.java)
+                }
+            }
+//        }
     }
 }

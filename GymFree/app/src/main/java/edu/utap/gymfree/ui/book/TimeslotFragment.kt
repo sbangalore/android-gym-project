@@ -24,16 +24,15 @@ import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.PlayGamesAuthProvider
 
-import com.google.firebase.ktx.Firebase
 import edu.utap.gymfree.R
 import kotlinx.android.synthetic.main.fragment_timeslots.*
-import kotlinx.android.synthetic.main.row_timeslot.*
 
 
 class TimeslotFragment : Fragment() {
     private val TAG = "XXX-TimeslotFragment"
     private val viewModel: TimeslotViewModel by activityViewModels()
     private lateinit var TimeslotAdapter: TimeslotAdapter
+    val currEmail = FirebaseAuth.getInstance().currentUser?.email
 
     companion object {
         fun newInstance(locationID: String): TimeslotFragment {
@@ -70,12 +69,16 @@ class TimeslotFragment : Fragment() {
         initRecyclerView()
 
         val locationID = arguments?.getString("locationID")!!
+        Log.i(TAG, locationID)
         viewModel.getTimeslots(locationID)
         viewModel.observeTimeslots().observe(viewLifecycleOwner, Observer {
-            Log.d(javaClass.simpleName, "Observe Chat $it")
-            Log.i("XXX-DBFragment", it.toString())
+            Log.d(javaClass.simpleName, "Observe timeslots $it")
+            Log.i(TAG, it.toString())
             TimeslotAdapter.submitList(it)
         })
+        if (currEmail.equals(resources.getString(R.string.owner_email))) {
+            TimeslotsTitle.text = "Select the timeslot for which you'd like to view the guest list."
+        }
 
     }
 
