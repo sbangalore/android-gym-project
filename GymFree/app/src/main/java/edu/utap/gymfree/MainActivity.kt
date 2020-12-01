@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -66,6 +67,14 @@ class MainActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             navController.navigate(R.id.navigation_create)
+        }
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            val count = supportFragmentManager.backStackEntryCount
+            Log.d(TAG, "NAV CHANGED: $count")
+            if (count != 0){
+                Log.d(TAG, "~~POPPED")
+                supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
         }
 
 
@@ -147,6 +156,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "ERROR: Sign in Failed")
             }
         }
+
     }
 
     public override fun onStart() {
@@ -177,6 +187,18 @@ class MainActivity : AppCompatActivity() {
 //                    .commit()
         }
     }
+    override fun onBackPressed(){
+        val count = supportFragmentManager.backStackEntryCount
+        Log.d(TAG, "~~BACK WAS PRESSED: $count")
+        if (count != 0){
+            Log.d(TAG, "~~POPPED")
+            supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+        else{
+            super.onBackPressed()
+        }
+    }
+
 
 
 }
