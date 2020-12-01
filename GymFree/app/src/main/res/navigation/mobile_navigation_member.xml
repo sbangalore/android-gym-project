@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="edu.utap.gymfree.ui.dashboard.DashboardFragment"
+        android:name="edu.utap.gymfree.ui.dashboard_member.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
