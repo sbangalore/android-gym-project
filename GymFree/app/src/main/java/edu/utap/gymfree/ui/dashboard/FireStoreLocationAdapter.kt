@@ -8,15 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import edu.utap.gymfree.Location
 import edu.utap.gymfree.R
+import edu.utap.gymfree.ui.book.TimeslotFragment
 
 class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
     : ListAdapter<Location, FireStoreLocationAdapter.VH>(Diff()) {
     private val TAG = "adapter"
+    private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     // This class allows the adapter to compute what has changed
     class Diff : DiffUtil.ItemCallback<Location>() {
         override fun areItemsTheSame(oldItem: Location, newItem: Location): Boolean {
@@ -49,7 +54,6 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
         private var delButSure = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.deleteButtonSure)
         private var guestListButton = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.guestListButton)
         private var guestList = itemView.findViewById<RecyclerView>(R.id.guestList)
-        private var hideGuestListButton = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.hideGuestListButton)
 
         private fun bindElements(item: Location,
                                  userTV: TextView,
@@ -61,8 +65,7 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
                                  delBut: com.google.android.material.button.MaterialButton,
                                  delButSure: com.google.android.material.button.MaterialButton,
                                  guestListButton: com.google.android.material.button.MaterialButton,
-                                 guestList: RecyclerView,
-                                 hideGuestListButton: com.google.android.material.button.MaterialButton
+                                 guestList: RecyclerView
         ) {
             Log.i("XXX-ADAPTER-bindels", item.toString())
             userTV.text = Html.fromHtml(item.name)
@@ -118,15 +121,12 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
 
             guestListButton.setOnClickListener {
                 Log.i(TAG, "get details")
-                guestList.visibility = View.VISIBLE
-                guestListButton.visibility = View.GONE
-                hideGuestListButton.visibility = View.VISIBLE
-            }
-
-            hideGuestListButton.setOnClickListener {
-                guestList.visibility = View.GONE
-                guestListButton.visibility = View.VISIBLE
-                hideGuestListButton.visibility = View.GONE
+                (itemView.context as FragmentActivity)
+                        .supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.nav_host_fragment, TimeslotFragment.newInstance(item.rowID))
+                        .addToBackStack("select")
+                        .commit()
             }
 
             userTV.visibility = View.VISIBLE
@@ -137,7 +137,29 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
             timeTV.visibility = View.VISIBLE
             delButSure.visibility = View.GONE
             guestList.visibility = View.GONE
-            hideGuestListButton.visibility = View.GONE
+
+//            val timeslots = db
+//                    .collection("locations")
+//                    .document(item.rowID)
+//                    .collection("timeslots")
+//                    .orderBy("startTime", Query.Direction.ASCENDING)
+//                    .get()
+//                    .addOnSuccessListener { documents ->
+//                        for (document in documents) {
+//                            Log.d(TAG, "${document.id} => ${document.data}")
+//                        }
+//                    }
+//                    .addOnFailureListener { exception ->
+//                        Log.w(TAG, "Error getting documents: ", exception)
+//                    }
+
+//            val numReservations = timeslots
+//                    .document(item.rowId)
+//                    .collection("reservations")
+//                    .get()
+//                    .toString()
+
+//            guestListButton.text = numReservations
         }
 
         fun bind(item: Location?) {
@@ -156,8 +178,7 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
                     delBut,
                     delButSure,
                     guestListButton,
-                    guestList,
-                    hideGuestListButton
+                    guestList
             )
         }
     }

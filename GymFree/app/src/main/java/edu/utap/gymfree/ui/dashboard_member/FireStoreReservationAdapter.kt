@@ -54,7 +54,6 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
         private var delButSure = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.deleteButtonSure)
         private var guestListButton = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.guestListButton)
         private var guestList = itemView.findViewById<RecyclerView>(R.id.guestList)
-        private var hideGuestListButton = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.hideGuestListButton)
 
         private fun bindElements(item: Reservation,
                                  userTV: TextView,
@@ -66,8 +65,7 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                                  delBut: com.google.android.material.button.MaterialButton,
                                  delButSure: com.google.android.material.button.MaterialButton,
                                  guestListButton: com.google.android.material.button.MaterialButton,
-                                 guestList: RecyclerView,
-                                 hideGuestListButton: com.google.android.material.button.MaterialButton
+                                 guestList: RecyclerView
         ) {
             Log.i("XXX-ADAPTER-bindels", item.toString())
             val loc = db.collection("locations").document(item.locationId!!).get()
@@ -135,13 +133,6 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                 Log.i(TAG, "get details")
                 guestList.visibility = View.VISIBLE
                 guestListButton.visibility = View.GONE
-                hideGuestListButton.visibility = View.VISIBLE
-            }
-
-            hideGuestListButton.setOnClickListener {
-                guestList.visibility = View.GONE
-                guestListButton.visibility = View.VISIBLE
-                hideGuestListButton.visibility = View.GONE
             }
 
             userTV.visibility = View.VISIBLE
@@ -152,7 +143,6 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
             timeTV.visibility = View.VISIBLE
             delButSure.visibility = View.GONE
             guestList.visibility = View.GONE
-            hideGuestListButton.visibility = View.GONE
         }
 
         fun bind(item: Reservation?) {
@@ -171,8 +161,7 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                     delBut,
                     delButSure,
                     guestListButton,
-                    guestList,
-                    hideGuestListButton
+                    guestList
             )
         }
     }
