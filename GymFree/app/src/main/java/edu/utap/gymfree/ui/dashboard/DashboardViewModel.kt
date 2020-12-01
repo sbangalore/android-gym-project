@@ -6,12 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import edu.utap.firechat.FirestoreAuthLiveData
 import edu.utap.gymfree.Location
 import edu.utap.gymfree.MainActivity
 import edu.utap.gymfree.R
+import edu.utap.gymfree.Reservation
 
 class DashboardViewModel : ViewModel() {
     private val TAG = "XXX-DashboardViewModel"
@@ -55,10 +57,10 @@ class DashboardViewModel : ViewModel() {
 
     fun getLocations() {
 //        Log.i(TAG, FirebaseAuth.getInstance().currentUser?.email)
+        val user = FirebaseAuth.getInstance().currentUser
         if (!FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
-            Log.i(TAG, "Owner not logged in.")
             locations.value = listOf()
-            return
+
         } else {
             db
             .collection("locations")

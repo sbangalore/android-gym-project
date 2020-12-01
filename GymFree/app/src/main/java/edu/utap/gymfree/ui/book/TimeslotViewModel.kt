@@ -56,7 +56,12 @@ class TimeslotViewModel : ViewModel() {
             val reservation = mapOf(
                 "name" to name,
                 "rowId" to resID,
-                "userId" to myUid()
+                "userId" to myUid(),
+                "startTime" to timeslot.startTime,
+                "endTime" to timeslot.endTime,
+                "timeslotId" to timeslot.rowId,
+                "locationId" to locationId
+
             )
             db
                 .collection("locations")
