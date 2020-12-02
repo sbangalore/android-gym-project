@@ -18,6 +18,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.fragment_chat.*
 
@@ -31,19 +32,20 @@ class ChatFragment : Fragment() {
     private val OWNER_EMAIL = "owner@example.com"
     private val OWNER_UID = "x3or1FXSFFNyylZZeq4BkQnG3sf2"
     private var memberUid: String? = null
+    val currEmail = FirebaseAuth.getInstance().currentUser?.email
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        chatViewModel =
-            ViewModelProvider(this).get(ChatViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_chat, container, false)
-//        val textView: TextView = root.findViewById(R.id.text_chat)
-//        chatViewModel.text.observe(viewLifecycleOwner, Observer {
-//            textView.text = it
-//        })
-        return root
+        if (currEmail.equals(resources.getString(R.string.owner_email))) {
+            val root = inflater.inflate(R.layout.fragment_chat_dashboard, container, false)
+        } else {
+            chatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
+            val root = inflater.inflate(R.layout.fragment_chat, container, false)
+            return root
+        }
     }
 
 

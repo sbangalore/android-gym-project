@@ -98,7 +98,7 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
                                         .supportFragmentManager
                                         .beginTransaction()
                                         .replace(R.id.nav_host_fragment, UsersFragment.newInstance(loc, item.rowId))
-                                        .addToBackStack("reservations")
+                                        .addToBackStack("users")
                                         .commit()
                             } else {
                                 Log.d(TAG, "XXX clicked on book, timeslot: ${item.rowId}")
