@@ -109,6 +109,11 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
                                 (itemView.context as FragmentActivity)
                                         .supportFragmentManager
                                         .popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+                                (itemView.context as FragmentActivity)
+                                        .supportFragmentManager
+                                        .popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
                                 Log.d(TAG, "POPPED")
                             }
                         }

@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             if (count != 0){
                 Log.d(TAG, "~~POPPED")
                 supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }
         }
         createSignInIntent()
@@ -189,6 +190,7 @@ class MainActivity : AppCompatActivity() {
         if (count != 0){
             Log.d(TAG, "~~POPPED")
             supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         else{
             super.onBackPressed()
