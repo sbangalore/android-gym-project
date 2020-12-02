@@ -40,12 +40,12 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         if (currEmail.equals(resources.getString(R.string.owner_email))) {
-            val root = inflater.inflate(R.layout.fragment_chat_dashboard, container, false)
+
         } else {
-            chatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
-            val root = inflater.inflate(R.layout.fragment_chat, container, false)
-            return root
-        }
+        chatViewModel =
+            ViewModelProvider(this).get(ChatViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_chat, container, false)
+        return root
     }
 
 
