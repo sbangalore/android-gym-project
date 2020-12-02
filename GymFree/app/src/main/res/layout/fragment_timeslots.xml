@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.book.TimeslotFragment"
+    tools:context=".ui.timeslot.TimeslotFragment"
     android:layout_marginBottom="50dp"
     android:background="@color/white">
 
@@ -33,7 +33,9 @@
             android:layout_height="wrap_content"
             android:text="Select Timeslot which you would like to book"
             android:textSize="20sp"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:layout_marginTop="20dp"/>
+        <!--            android:textAppearance="?attr/textAppearanceHeadline6"-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/timeslotRV"

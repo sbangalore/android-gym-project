@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.Barrier
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -68,10 +69,14 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(R.id.navigation_create)
         }
 
-
-//        if (auth.currentUser == null) {
-//            createSignInIntent()
-//        }
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            val count = supportFragmentManager.backStackEntryCount
+            Log.d(TAG, "NAV CHANGED: $count")
+            if (count != 0){
+                Log.d(TAG, "~~POPPED")
+                supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
+        }
         createSignInIntent()
 
 
@@ -175,6 +180,18 @@ class MainActivity : AppCompatActivity() {
 //                    .beginTransaction()
 //                    .replace(R.id.nav_host_fragment, SelectFragment.newInstance())
 //                    .commit()
+        }
+    }
+
+    override fun onBackPressed(){
+        val count = supportFragmentManager.backStackEntryCount
+        Log.d(TAG, "~~BACK WAS PRESSED: $count")
+        if (count != 0){
+            Log.d(TAG, "~~POPPED")
+            supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+        else{
+            super.onBackPressed()
         }
     }
 

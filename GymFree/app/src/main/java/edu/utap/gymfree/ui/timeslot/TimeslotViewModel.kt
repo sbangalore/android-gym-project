@@ -1,4 +1,4 @@
-package edu.utap.gymfree.ui.book
+package edu.utap.gymfree.ui.timeslot
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,9 +9,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import edu.utap.firechat.FirestoreAuthLiveData
-import edu.utap.gymfree.Location
-import edu.utap.gymfree.MainActivity
-import edu.utap.gymfree.R
 
 class TimeslotViewModel : ViewModel() {
     private val TAG = "XXX-TimeslotViewModel"

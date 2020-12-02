@@ -1,4 +1,4 @@
-package edu.utap.gymfree.ui.book
+package edu.utap.gymfree.ui.timeslot
 
 import android.icu.text.SimpleDateFormat
 import android.util.Log
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import edu.utap.gymfree.R
+import edu.utap.gymfree.ui.users.UsersFragment
 import java.util.*
 
 class TimeslotAdapter(private var viewModel: TimeslotViewModel)
@@ -80,6 +81,7 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
                     if (remaining <= 0){
                         // remove item from list
                         rowHolder.visibility = View.GONE
+                        notifyItemRemoved(adapterPosition)
                     }
                     else{
                         if (!currEmail.equals("owner@example.com")) {
@@ -92,13 +94,18 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
                                 Log.d(TAG, "XXX clicked on view, timeslot: ${item.rowId}")
                                 Toast.makeText(itemView.context,
                                         "Guestlist for ${item.startTime}", Toast.LENGTH_SHORT)
+                                (itemView.context as FragmentActivity)
+                                        .supportFragmentManager
+                                        .beginTransaction()
+                                        .replace(R.id.nav_host_fragment, UsersFragment.newInstance(loc, item.rowId))
+                                        .addToBackStack("reservations")
+                                        .commit()
                             } else {
                                 Log.d(TAG, "XXX clicked on book, timeslot: ${item.rowId}")
                                 val locID = viewModel.observeLocID().value
                                 viewModel.addReservation(item, locID!!)
                                 Toast.makeText(itemView.context,
                                         "Succesfully booked ${item.startTime}", Toast.LENGTH_SHORT)
-
                                 (itemView.context as FragmentActivity)
                                         .supportFragmentManager
                                         .popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
@@ -153,12 +160,19 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
                 Log.i("XXX-ADAPTER-bind", "NULL!")
                 return
             }
+
+            val dateFormat = SimpleDateFormat("MM dd HH:mm:ss z yyyy", Locale.ENGLISH)
+            val time = dateFormat.parse(item.endTime)
+//            if (time > Calendar.getInstance().time) {
             bindElements(
                     item,
                     timeslotText,
                     bookBut,
                     rowHolder
             )
+//            } else {
+//                rowHolder.visibility = View.GONE
+//            }
         }
     }
 
