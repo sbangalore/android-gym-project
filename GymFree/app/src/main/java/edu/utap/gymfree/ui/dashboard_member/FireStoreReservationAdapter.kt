@@ -107,7 +107,7 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
             var end = sdf.parse(item.endTime)
             val dayofweek = SimpleDateFormat("EEEE", Locale.ENGLISH)
 
-            dateTV.text = Html.fromHtml("<b>Date</b>: ${dayofweek.format(start)}, ${start.month+1}/${start.date}/${start.year}")
+            dateTV.text = Html.fromHtml("<b>Date</b>: ${dayofweek.format(start)}, ${start.month+1}/${start.date}/${start.year + 1900}")
 
             var startMinutes = start.minutes.toString()
             if (startMinutes == "0"){
