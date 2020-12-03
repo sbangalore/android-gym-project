@@ -109,7 +109,7 @@
         app:values="@array/initialHours"
         android:valueFrom="0"
         android:valueTo="24"
-        android:stepSize="0.5"
+        android:stepSize="1"
         android:tooltipText="true"
         android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
         />

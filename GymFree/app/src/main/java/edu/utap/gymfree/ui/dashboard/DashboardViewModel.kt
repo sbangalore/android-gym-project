@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.SetOptions
 import edu.utap.firechat.FirestoreAuthLiveData
 import edu.utap.gymfree.Location
 import edu.utap.gymfree.MainActivity
@@ -39,6 +40,45 @@ class DashboardViewModel : ViewModel() {
     }
 
     fun deleteLocation(location: Location) {
+        db
+                .collection("locations")
+                .document(location.rowID)
+                .collection("timeslots")
+                .get()
+                .addOnSuccessListener { timeslots ->
+                    for (time in timeslots) {
+                        val timeID = time.getString("rowId")
+                        if (timeID != null) {
+                            db.collection("locations")
+                                    .document(location.rowID)
+                                    .collection("timeslots")
+                                    .document(timeID)
+                                    .collection("reservations")
+                                    .get()
+                                    .addOnSuccessListener { reservations ->
+                                        for (reservation in reservations) {
+                                            val resID = reservation.getString("userId")
+                                            if (resID != null) {
+                                                db.collection("locations")
+                                                        .document(location.rowID)
+                                                        .collection("timeslots")
+                                                        .document(timeID)
+                                                        .collection("reservations")
+                                                        .document(resID)
+                                                        .delete()
+                                            }
+                                        }
+                                    }
+
+                            db.collection("locations")
+                                    .document(location.rowID)
+                                    .collection("timeslots")
+                                    .document(timeID)
+                                    .delete()
+                        }
+                    }
+                }
+
         db.collection("locations")
                 .document(location.rowID)
                 .delete()
