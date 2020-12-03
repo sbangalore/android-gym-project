@@ -8,14 +8,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.findNavController
+
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationMenu
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ServerTimestamp
 import edu.utap.gymfree.R
 import edu.utap.gymfree.Reservation
+import edu.utap.gymfree.ui.chat.ChatFragment
+import edu.utap.gymfree.ui.timeslot.TimeslotFragment
+
+
+import java.util.*
 
 class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
     : ListAdapter<Reservation, FireStoreReservationAdapter.VH>(Diff()) {
@@ -38,34 +50,36 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
         }
     }
     companion object {
-        private val dateFormat = SimpleDateFormat("dd MMM, yyyy / hh:mm")
+        private val sdf = SimpleDateFormat("MM dd HH:mm:ss z yyyy", Locale.ENGLISH)
     }
 
     // ViewHolder pattern minimizes calls to findViewById
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // May the Lord have mercy upon my soul
         private var userTV = itemView.findViewById<TextView>(R.id.locationUserTV)
-        private var createdTV = itemView.findViewById<TextView>(R.id.locationTimeTV)
         private var addressTV = itemView.findViewById<TextView>(R.id.locationAddressTV)
-        private var capacityTV = itemView.findViewById<TextView>(R.id.locationCapacityTV)
-        private var openTV = itemView.findViewById<TextView>(R.id.locationOpeningTV)
-        private var closeTV = itemView.findViewById<TextView>(R.id.locationClosingTV)
-        private var delBut = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.deleteButton)
-        private var delButSure = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.deleteButtonSure)
-        private var guestListButton = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.guestListButton)
-        private var guestList = itemView.findViewById<RecyclerView>(R.id.guestList)
+        private var dateTV = itemView.findViewById<TextView>(R.id.locationDateTV)
+        private var timeslotTV = itemView.findViewById<TextView>(R.id.locationTimeslotTV)
+        // buttons
+        private var cancelBut = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.cancelButton)
+        private var cancelButSure = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.cancelButtonSure)
+        private var contactBut = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.contactButton)
+        private var routeBut = itemView.findViewById<com.google.android.material.button.MaterialButton>(R.id.routeButton)
+        // recycler view
+        private var reservationList = itemView.findViewById<RecyclerView>(R.id.guestList)
+
+
 
         private fun bindElements(item: Reservation,
                                  userTV: TextView,
-                                 timeTV: TextView,
                                  addressTV: TextView,
-                                 capacityTV: TextView,
-                                 openTV: TextView,
-                                 closeTV: TextView,
-                                 delBut: com.google.android.material.button.MaterialButton,
-                                 delButSure: com.google.android.material.button.MaterialButton,
-                                 guestListButton: com.google.android.material.button.MaterialButton,
-                                 guestList: RecyclerView
+                                 dateTV: TextView,
+                                 timeslotTV: TextView,
+                                 cancelBut: com.google.android.material.button.MaterialButton,
+                                 cancelButSure: com.google.android.material.button.MaterialButton,
+                                 contactBut: com.google.android.material.button.MaterialButton,
+                                 routeBut: com.google.android.material.button.MaterialButton,
+                                 reservationList: RecyclerView
         ) {
             Log.i("XXX-ADAPTER-bindels", item.toString())
             val loc = db.collection("locations").document(item.locationId!!).get()
@@ -89,60 +103,72 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
 //                )
             }
 
-            var startTime = item.startTime
-            var endTime = item.endTime
+            var start = sdf.parse(item.startTime)
+            var end = sdf.parse(item.endTime)
+            val dayofweek = SimpleDateFormat("EEEE", Locale.ENGLISH)
 
+            dateTV.text = Html.fromHtml("<b>Date</b>: ${dayofweek.format(start)}, ${start.month+1}/${start.date}/${start.year}")
 
-            openTV.text = Html.fromHtml("From  $startTime")
-            closeTV.text = Html.fromHtml("To $endTime")
-//            timeTV.text = Html.fromHtml("<small>Created on " + dateFormat.format(item.timeStamp?.toDate()).toString() + "<small>")
+            var startMinutes = start.minutes.toString()
+            if (startMinutes == "0"){
+                startMinutes = "00"
+            }
 
-            delBut.setOnClickListener {
+            var endMinutes = end.minutes.toString()
+            if (endMinutes == "0"){
+                endMinutes = "00"
+            }
+
+            val tslot = Html.fromHtml("<b>Time</b>: ${start.hours}:${startMinutes} - ${end.hours}:${endMinutes}")
+            timeslotTV.text = tslot
+
+            cancelBut.setOnClickListener {
                 Log.i(TAG,"longclick - delbut")
-                delBut.visibility = View.GONE
-                delButSure.visibility = View.VISIBLE
+                cancelBut.visibility = View.GONE
+                cancelButSure.visibility = View.VISIBLE
                 Handler().postDelayed(Runnable {
-                    delBut.visibility = View.VISIBLE
-                    delButSure.visibility = View.GONE
+                    cancelBut.visibility = View.VISIBLE
+                    cancelButSure.visibility = View.GONE
                 }, 3000)
             }
 
-            delBut.setOnLongClickListener {
+            cancelBut.setOnLongClickListener {
                 Log.i(TAG,"longclick - delbutsure")
-                delBut.visibility = View.GONE
-                delButSure.visibility = View.VISIBLE
+                cancelBut.visibility = View.GONE
+                cancelButSure.visibility = View.VISIBLE
                 Handler().postDelayed(Runnable {
-                    delBut.visibility = View.VISIBLE
-                    delButSure.visibility = View.GONE
+                    cancelBut.visibility = View.VISIBLE
+                    cancelButSure.visibility = View.GONE
                 }, 3000)
                 true
             }
 
-            delButSure.setOnClickListener {
-                Log.i(TAG,"clik - delbut")
-                viewModel.deleteReservations(item)
+            cancelButSure.setOnClickListener {
+                Log.i(TAG,"click - cancelbut")
+//                viewModel.deleteLocation(item)
             }
 
-            delButSure.setOnLongClickListener {
-                Log.i(TAG,"clik - delbutsure")
-                viewModel.deleteReservations(item)
+            cancelButSure.setOnLongClickListener {
+                Log.i(TAG,"click - delbutsure")
+//                viewModel.deleteLocation(item)
                 true
             }
 
-            guestListButton.setOnClickListener {
-                Log.i(TAG, "get details")
-                guestList.visibility = View.VISIBLE
-                guestListButton.visibility = View.GONE
+            contactBut.setOnClickListener {
+                Log.i(TAG,"click - delbutsure")
             }
+
+
 
             userTV.visibility = View.VISIBLE
             addressTV.visibility = View.VISIBLE
-            capacityTV.visibility = View.VISIBLE
-            openTV.visibility = View.VISIBLE
-            closeTV.visibility = View.VISIBLE
-            timeTV.visibility = View.VISIBLE
-            delButSure.visibility = View.GONE
-            guestList.visibility = View.GONE
+            dateTV.visibility = View.VISIBLE
+            timeslotTV.visibility = View.VISIBLE
+            cancelBut.visibility = View.VISIBLE
+            contactBut.visibility = View.VISIBLE
+            routeBut.visibility = View.VISIBLE
+            cancelButSure.visibility = View.GONE
+            reservationList.visibility = View.GONE
         }
 
         fun bind(item: Reservation?) {
@@ -153,23 +179,21 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
             bindElements(
                     item,
                     userTV,
-                    createdTV,
                     addressTV,
-                    capacityTV,
-                    openTV,
-                    closeTV,
-                    delBut,
-                    delButSure,
-                    guestListButton,
-                    guestList
+                    dateTV,
+                    timeslotTV,
+                    cancelBut,
+                    cancelButSure,
+                    contactBut,
+                    routeBut,
+                    reservationList
             )
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.row_location, parent, false)
-        //Log.d(MainActivity.TAG, "Create VH")
+                .inflate(R.layout.row_reservation, parent, false)
         return VH(itemView)
     }
 
