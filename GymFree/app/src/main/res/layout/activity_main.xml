@@ -24,7 +24,8 @@
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleRoundedCornerRadius="0dp"
+        app:fabCradleMargin="0dp"
         android:layout_marginTop="20dp"
         android:layout_gravity="bottom">
 

@@ -1,4 +1,4 @@
-package edu.utap.gymfree.ui.book
+package edu.utap.gymfree.ui.timeslot
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ServerTimestamp

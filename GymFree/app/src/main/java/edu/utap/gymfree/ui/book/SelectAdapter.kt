@@ -1,14 +1,11 @@
 package edu.utap.gymfree.ui.book
 
 import android.icu.text.SimpleDateFormat
-import android.opengl.Visibility
-import android.os.Handler
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
@@ -16,7 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import edu.utap.gymfree.Location
 import edu.utap.gymfree.R
-import kotlinx.coroutines.delay
+import edu.utap.gymfree.ui.timeslot.TimeslotFragment
 
 class SelectAdapter(private var viewModel: SelectViewModel)
     : ListAdapter<Location, SelectAdapter.VH>(Diff()) {

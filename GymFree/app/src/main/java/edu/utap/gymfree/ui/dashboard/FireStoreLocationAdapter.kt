@@ -13,10 +13,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import edu.utap.gymfree.Location
 import edu.utap.gymfree.R
-import edu.utap.gymfree.ui.book.TimeslotFragment
+import edu.utap.gymfree.ui.timeslot.TimeslotFragment
 
 class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
     : ListAdapter<Location, FireStoreLocationAdapter.VH>(Diff()) {

@@ -77,10 +77,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-//        if (auth.currentUser == null) {
-//            createSignInIntent()
-//        }
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            val count = supportFragmentManager.backStackEntryCount
+            Log.d(TAG, "NAV CHANGED: $count")
+            if (count != 0){
+                Log.d(TAG, "~~POPPED")
+                supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                supportFragmentManager.popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
+        }
         createSignInIntent()
 
 
@@ -199,6 +204,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    override fun onBackPressed(){
+        val count = supportFragmentManager.backStackEntryCount
+        Log.d(TAG, "~~BACK WAS PRESSED: $count")
+        if (count != 0){
+            Log.d(TAG, "~~POPPED")
+            supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            supportFragmentManager.popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+        else{
+            super.onBackPressed()
+        }
+    }
 
 
 }
