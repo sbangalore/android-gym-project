@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import edu.utap.gymfree.ui.timeslot.TimeslotFragment
 import kotlinx.android.synthetic.main.fragment_chat.*
 
 class ChatFragment : Fragment() {
@@ -34,6 +35,11 @@ class ChatFragment : Fragment() {
     private var memberUid: String? = null
     val currEmail = FirebaseAuth.getInstance().currentUser?.email
 
+    companion object {
+        fun newInstance(): ChatFragment {
+            return ChatFragment()
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

@@ -98,7 +98,7 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
                                         .supportFragmentManager
                                         .beginTransaction()
                                         .replace(R.id.nav_host_fragment, UsersFragment.newInstance(loc, item.rowId))
-                                        .addToBackStack("users")
+                                        .addToBackStack("select")
                                         .commit()
                             } else {
                                 Log.d(TAG, "XXX clicked on book, timeslot: ${item.rowId}")
@@ -110,9 +110,9 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
                                         .supportFragmentManager
                                         .popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
-                                (itemView.context as FragmentActivity)
-                                        .supportFragmentManager
-                                        .popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//                                (itemView.context as FragmentActivity)
+//                                        .supportFragmentManager
+//                                        .popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
                                 Log.d(TAG, "POPPED")
                             }
