@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_chat"
-        android:name="edu.utap.gymfree.ui.chat.ChatFragment"
+        android:name="edu.utap.gymfree.ui.dashboard_chat.ChatDashboardFragment"
         android:label="Chat"
         tools:layout="@layout/fragment_chat" />
 </navigation>

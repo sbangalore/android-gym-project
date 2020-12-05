@@ -20,10 +20,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import edu.utap.gymfree.ui.dashboard_chat.ChatDashboardFragment
 import edu.utap.gymfree.ui.timeslot.TimeslotFragment
 import kotlinx.android.synthetic.main.fragment_chat.*
 
 class ChatFragment : Fragment() {
+    private val TAG = "XXX-ChatFragment"
 
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var chatAdapter: FirestoreChatAdapter
@@ -33,7 +35,7 @@ class ChatFragment : Fragment() {
     private val OWNER_EMAIL = "owner@example.com"
     private val OWNER_UID = "x3or1FXSFFNyylZZeq4BkQnG3sf2"
     private var memberUid: String? = null
-    val currEmail = FirebaseAuth.getInstance().currentUser?.email
+    private var memberName: String? = null
 
     companion object {
         fun newInstance(): ChatFragment {
@@ -97,18 +99,19 @@ class ChatFragment : Fragment() {
                         memberUid = "unknown"
                         Log.d("ChatFragment", "XXX, currentUser null!")
                     } else {
-                        // XXX Owner chat information goes here
-                        receiverUid = "USER TO SEND TO"
-                        receiverName = "USER TO SEND TO"
-                        memberUid = "USER TO SEND TO"
-
                         // Member chat information
-                        if (!cUser.email.equals(OWNER_EMAIL)){
+                        if (cUser.email.equals(OWNER_EMAIL)){
+                            receiverUid = memberUid
+                            receiverName = memberName
+                            memberUid = OWNER_UID
+                            name = "Owner"
+                            Log.i(TAG, "NAME: $name")
+                        } else {
                             receiverUid = OWNER_UID
                             receiverName = "Owner"
                             memberUid = cUser.uid
+                            name = cUser.displayName
                         }
-                        name = cUser.displayName
                         ownerUid = cUser.uid
                     }
                     message = composeMessageET.text.toString()
@@ -116,6 +119,8 @@ class ChatFragment : Fragment() {
                     clearCompose()
                 }
                 chatViewModel.saveChatRow(chatRow)
+                chatViewModel.saveChatTime(chatRow)
+
             }
         }
     }
@@ -123,7 +128,18 @@ class ChatFragment : Fragment() {
     // Something might have changed.  Redo query
     override fun onResume() {
         super.onResume()
-        chatViewModel.getChat()
+
+        val bundle = this.arguments
+        if (bundle != null) {
+            memberUid =  bundle.getString("memberUid")
+            memberName = bundle.getString("memberName")
+        } else {
+            memberUid = FirebaseAuth.getInstance().currentUser?.uid
+        }
+
+        if (memberUid != null) {
+            chatViewModel.getChat(memberUid!!)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

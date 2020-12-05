@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.SetOptions
 import edu.utap.firechat.FirestoreAuthLiveData
 import edu.utap.gymfree.Location
 import java.io.File
@@ -71,6 +72,7 @@ class ChatViewModel : ViewModel() {
     fun observeChat(): LiveData<List<ChatRow>> {
         return chat
     }
+
     fun saveChatRow(chatRow: ChatRow) {
         Log.d(
             "ChatViewModel",
@@ -101,6 +103,32 @@ class ChatViewModel : ViewModel() {
             }
     }
 
+    fun saveChatTime(chatRow: ChatRow) {
+        // if is not owner's then save this time as the latest message time in the user db
+        db
+            .collection("globalChat")
+            .document(chatRow.rowID)
+            .get()
+            .addOnSuccessListener { msg ->
+                if (msg.exists()) {
+                    val timeData = hashMapOf(
+                        "lastMessageTime" to msg.getTimestamp("timeStamp")
+                    )
+                    chatRow.memberUid?.let { memberUid ->
+                        db.collection("users")
+                            .document(memberUid)
+                            .set(timeData, SetOptions.merge())
+                    }
+
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
+    }
+
     fun deleteChatRow(chatRow: ChatRow){
         // Delete picture (if any) on the server, asynchronously
 //        val uuid = chatRow.pictureUUID
@@ -119,44 +147,27 @@ class ChatViewModel : ViewModel() {
                 Log.w(javaClass.simpleName, "Error deleting row", it)
 
             }
-
-
-
     }
 
-    fun getChat() {
-        val user = FirebaseAuth.getInstance().currentUser
-        if(user == null) {
-            Log.d(javaClass.simpleName, "Can't get chat, no one is logged in")
-            chat.value = listOf()
-            return
-        }
-        // get chat for member
-        if (!user.email.equals(OWNER_EMAIL)) {
-            Log.d(TAG, "getChat: MEMBER CHAT")
-            Log.d(TAG, "getChat: ${user.uid}")
-            // XXX Write me.  Limit total number of chat rows to 100
-            db.collection("globalChat")
-                    .whereEqualTo("memberUid", user.uid)
-                    .orderBy("timeStamp")
-                    .limit(100)
-                    .addSnapshotListener { querySnapshot, ex ->
-                        if (ex != null) {
-                            Log.w(TAG, "listen:error", ex)
-                            return@addSnapshotListener
-                        }
-
-                        Log.d(TAG, "fetch ${querySnapshot!!.documents.size}")
-                        chat.value = querySnapshot.documents.mapNotNull {
-                            it.toObject(ChatRow::class.java)
-                        }
-                        Log.d(TAG, "getChat: ${chat.value}")
+    fun getChat(memberUid: String) {
+        Log.d(TAG, "getChat: MEMBER CHAT")
+        Log.d(TAG, "getChat: ${memberUid}")
+        db.collection("globalChat")
+                .whereEqualTo("memberUid", memberUid)
+                .orderBy("timeStamp")
+                .limit(100)
+                .addSnapshotListener { querySnapshot, ex ->
+                    if (ex != null) {
+                        Log.w(TAG, "listen:error", ex)
+                        return@addSnapshotListener
                     }
-        }
-        else{
-            // XXX owner chat query goes here
-            Log.d(TAG, "getChat: OWNER CHAT")
-        }
+
+                    Log.d(TAG, "fetch ${querySnapshot!!.documents.size}")
+                    chat.value = querySnapshot.documents.mapNotNull {
+                        it.toObject(ChatRow::class.java)
+                    }
+                    Log.d(TAG, "getChat: ${chat.value}")
+                }
     }
 
     /////////////////////////////////////////////////////////////

@@ -4,20 +4,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.chat.ChatFragment">
+    tools:context=".ui.timeslot.TimeslotFragment"
+    android:layout_marginBottom="50dp"
+    android:background="@color/white">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chatDashboardRV"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_weight="1"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/enterTextLL"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="20dp"
+        android:focusable="true"
+        style="Widget.MaterialComponents.CardView"
+        >
+
+    <LinearLayout
+        android:id="@+id/userControls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/TimeslotsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Support Messenger"
+            android:textSize="20sp"
+            android:layout_margin="8dp"
+            android:layout_marginTop="20dp"/>
+        <!--            android:textAppearance="?attr/textAppearanceHeadline6"-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userRV"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
