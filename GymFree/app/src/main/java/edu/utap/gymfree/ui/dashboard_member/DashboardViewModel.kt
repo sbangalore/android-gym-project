@@ -1,5 +1,6 @@
 package edu.utap.gymfree.ui.dashboard_member
 
+import android.icu.text.SimpleDateFormat
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -15,6 +16,7 @@ import edu.utap.gymfree.Location
 import edu.utap.gymfree.MainActivity
 import edu.utap.gymfree.R
 import edu.utap.gymfree.Reservation
+import java.util.*
 
 class DashboardViewModel : ViewModel() {
     private val TAG = "XXX-DashboardViewModel"
@@ -27,6 +29,7 @@ class DashboardViewModel : ViewModel() {
     private var reservations = MutableLiveData<List<Reservation>>()
     private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private var firebaseAuthLiveData = FirestoreAuthLiveData()
+    private val sdf = SimpleDateFormat("MM dd HH:mm:ss z yyyy", Locale.ENGLISH)
 
     fun myUid(): String? {
         return firebaseAuthLiveData.value?.uid
@@ -87,6 +90,9 @@ class DashboardViewModel : ViewModel() {
 
 
     fun getReservations() {
+        val currentTime = Calendar.getInstance()
+        val reservationTime = Calendar.getInstance()
+
 //        Log.i(TAG, FirebaseAuth.getInstance().currentUser?.email)
         val user = FirebaseAuth.getInstance().currentUser
         if (!FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
@@ -94,6 +100,7 @@ class DashboardViewModel : ViewModel() {
                 db
                     .collectionGroup("reservations")
                     .whereEqualTo("userId", user.uid)
+                    .orderBy("startTime", Query.Direction.ASCENDING)
                     .addSnapshotListener { querySnapshot, ex ->
                         if (ex != null) {
                             Log.w(TAG, "listen:error", ex)
@@ -102,7 +109,14 @@ class DashboardViewModel : ViewModel() {
                         Log.d(TAG, "fetch ${querySnapshot!!.documents.size}")
                         reservations.value = querySnapshot.documents.mapNotNull {
                             Log.i(TAG + "XXXX", it.data.toString())
-                            it.toObject(Reservation::class.java)
+                            val endTime = it.getString("endTime")
+                            reservationTime.time = sdf.parse(endTime)
+                            if (currentTime < reservationTime){
+                                it.toObject(Reservation::class.java)
+                            }
+                            else{
+                                null
+                            }
                         }
                     }
             }
