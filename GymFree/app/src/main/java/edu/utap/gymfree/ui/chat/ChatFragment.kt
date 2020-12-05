@@ -34,7 +34,7 @@ class ChatFragment : Fragment() {
     private var receiverUid: String? = null
     private val OWNER_EMAIL = "owner@example.com"
     private val OWNER_UID = "x3or1FXSFFNyylZZeq4BkQnG3sf2"
-    private var memberUid: String? = null
+    private var memUid: String? = null
     private var memberName: String? = null
 
     companion object {
@@ -101,16 +101,18 @@ class ChatFragment : Fragment() {
                     } else {
                         // Member chat information
                         if (cUser.email.equals(OWNER_EMAIL)){
-                            receiverUid = memberUid
+                            Log.d(TAG, "~~~: ${memUid}")
+                            receiverUid = memUid
                             receiverName = memberName
-                            memberUid = OWNER_UID
-                            name = "Owner"
-                            Log.i(TAG, "NAME: $name")
+                            memberUid = memUid
+                            name = ""
+                            Log.i(TAG, "NAME: $memberName")
+                            Log.d(TAG, "~~~AFTER: ${memUid}")
                         } else {
                             receiverUid = OWNER_UID
                             receiverName = "Owner"
                             memberUid = cUser.uid
-                            name = cUser.displayName
+                            name = ""
                         }
                         ownerUid = cUser.uid
                     }
@@ -131,14 +133,14 @@ class ChatFragment : Fragment() {
 
         val bundle = this.arguments
         if (bundle != null) {
-            memberUid =  bundle.getString("memberUid")
+            memUid =  bundle.getString("memberUid")
             memberName = bundle.getString("memberName")
         } else {
-            memberUid = FirebaseAuth.getInstance().currentUser?.uid
+            memUid = FirebaseAuth.getInstance().currentUser?.uid
         }
 
-        if (memberUid != null) {
-            chatViewModel.getChat(memberUid!!)
+        if (memUid != null) {
+            chatViewModel.getChat(memUid!!)
         }
     }
 
@@ -166,6 +168,18 @@ class ChatFragment : Fragment() {
             }
             true
         }
+        val bundle = this.arguments
+        if (bundle != null) {
+            memUid =  bundle.getString("memberUid")
+            memberName = bundle.getString("memberName")
+        } else {
+            memUid = FirebaseAuth.getInstance().currentUser?.uid
+        }
+
+        if (memUid != null) {
+            chatViewModel.getChat(memUid!!)
+        }
+
 //        composeCameraIB.setOnClickListener {
 //            chatViewModel.takePhoto {
 //                Log.d(javaClass.simpleName, "uuid $it")

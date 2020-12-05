@@ -1,6 +1,7 @@
 package edu.utap.gymfree.ui.dashboard_member
 
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,16 +38,47 @@ class DashboardViewModel : ViewModel() {
     fun observeReservations(): LiveData<List<Reservation>> {
         return reservations
     }
-    fun deleteReservations(reservation: Reservation) {
-//        db.collection("locations")
-//                .document(location.rowID)
-//                .delete()
-//                .addOnSuccessListener {
-//                    Log.d(javaClass.simpleName, "Deleted ${location.name}")
-//                }
-//                .addOnFailureListener { e ->
-//                    Log.w(javaClass.simpleName, "Error deleting document", e)
-//                }
+    fun deleteReservation(reservation: Reservation) {
+        val resId = reservation.rowId
+        val locId = reservation.locationId!!
+
+        db
+            .collection("locations")
+            .document(locId)
+            .collection("timeslots")
+            .get()
+            .addOnSuccessListener { timeslots ->
+                for (time in timeslots) {
+                    val timeID = time.getString("rowId")
+                    if (timeID != null) {
+                        db.collection("locations")
+                            .document(locId)
+                            .collection("timeslots")
+                            .document(timeID)
+                            .collection("reservations")
+                            .get()
+                            .addOnSuccessListener { reservations ->
+                                for (r in reservations) {
+                                    val docId = r.getString("userId")
+
+                                    val rowId = r.getString("rowId")
+                                    if (rowId == resId && docId != null){
+                                        db.collection("locations")
+                                            .document(locId)
+                                            .collection("timeslots")
+                                            .document(timeID)
+                                            .collection("reservations")
+                                            .document(docId)
+                                            .delete()
+                                            .addOnSuccessListener {
+                                                Log.d(javaClass.simpleName, "Deleted ${reservation.name}")
+                                            }
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
     }
 
     fun getCurrentUser(): FirebaseUser? {
@@ -73,17 +105,6 @@ class DashboardViewModel : ViewModel() {
                             it.toObject(Reservation::class.java)
                         }
                     }
-
-//                db
-//                    .collection("locations")
-//                    .document()
-//                    .collection("timeslots")
-//                    .document()
-//                    .collection("reservations")
-//                    .document(user.uid)
-//                        .addSnapshotListener { value, error ->
-//                            Log.d(TAG, "getLocations: ${value}")
-//                        }
             }
 
         } else {
