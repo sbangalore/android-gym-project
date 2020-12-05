@@ -23,7 +23,7 @@ import java.util.*
 
 class ChatViewModel : ViewModel() {
     private val TAG = "XXX-ChatViewModel"
-    private val OWNER_EMAIL = "owner@example.com"
+    private val ownerUid = "x3or1FXSFFNyylZZeq4BkQnG3sf2"
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is chat Fragment"
@@ -115,9 +115,11 @@ class ChatViewModel : ViewModel() {
                         "lastMessageTime" to msg.getTimestamp("timeStamp")
                     )
                     chatRow.memberUid?.let { memberUid ->
-                        db.collection("users")
-                            .document(memberUid)
-                            .set(timeData, SetOptions.merge())
+                        if (memberUid != ownerUid) {
+                            db.collection("users")
+                                .document(memberUid)
+                                .set(timeData, SetOptions.merge())
+                        }
                     }
 
                 } else {

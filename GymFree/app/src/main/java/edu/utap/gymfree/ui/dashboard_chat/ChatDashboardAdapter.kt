@@ -70,6 +70,7 @@ class ChatDashboardAdapter(private var viewModel: ChatDashboardViewModel)
                         .supportFragmentManager
                         .beginTransaction()
                         .replace(R.id.nav_host_fragment, chatFragment)
+                        .addToBackStack("select")
                         .commit()
             }
 

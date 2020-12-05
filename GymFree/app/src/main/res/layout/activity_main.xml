@@ -8,17 +8,14 @@
     android:background="@color/white"
     tools:context=".MainActivity">
 
-
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="80dp"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/fab"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 
     <com.google.android.material.bottomappbar.BottomAppBar
@@ -27,7 +24,6 @@
         android:layout_height="wrap_content"
         app:fabCradleRoundedCornerRadius="0dp"
         app:fabCradleMargin="0dp"
-        android:layout_marginTop="20dp"
         android:layout_gravity="bottom">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
