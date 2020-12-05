@@ -100,7 +100,6 @@ class DashboardViewModel : ViewModel() {
         val user = FirebaseAuth.getInstance().currentUser
         if (!FirebaseAuth.getInstance().currentUser?.email.equals(OWNER_EMAIL)) {
             locations.value = listOf()
-
         } else {
             db
             .collection("locations")
