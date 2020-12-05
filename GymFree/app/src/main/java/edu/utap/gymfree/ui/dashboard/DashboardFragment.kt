@@ -145,11 +145,6 @@ class DashboardFragment : Fragment() {
                             }
                             addUserName.visibility = View.GONE
                         }
-
-                    }
-                    else{
-                        Log.d(TAG, "NAME ALREADY EXISTS: $name")
-                        addUserName.visibility = View.GONE
                     }
                 }
         }

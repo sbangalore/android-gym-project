@@ -1,6 +1,8 @@
 package edu.utap.gymfree.ui.dashboard_member
 
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
+import android.net.Uri
 import android.os.Handler
 import android.text.Html
 import android.util.Log
@@ -11,7 +13,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -28,6 +32,7 @@ import edu.utap.gymfree.ui.timeslot.TimeslotFragment
 
 
 import java.util.*
+import kotlin.coroutines.coroutineContext
 
 class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
     : ListAdapter<Reservation, FireStoreReservationAdapter.VH>(Diff()) {
@@ -36,7 +41,7 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
     // This class allows the adapter to compute what has changed
     class Diff : DiffUtil.ItemCallback<Reservation>() {
         override fun areItemsTheSame(oldItem: Reservation, newItem: Reservation): Boolean {
-            return oldItem.rowID == newItem.rowID
+            return oldItem.rowId == newItem.rowId
         }
 
 
@@ -90,17 +95,6 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                 userTV.text = Html.fromHtml(name)
                 addressTV.text = Html.fromHtml("<b>Address</b>: $address")
 
-
-//                val reservation = mapOf(
-//                        "name" to name,
-//                        "rowId" to resID,
-//                        "userId" to myUid(),
-//                        "startTime" to timeslot.startTime,
-//                        "endTime" to timeslot.endTime,
-//                        "timeslotId" to timeslot.rowId,
-//                        "locationId" to locationId
-//
-//                )
             }
 
             var start = sdf.parse(item.startTime)
@@ -145,17 +139,52 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
 
             cancelButSure.setOnClickListener {
                 Log.i(TAG,"click - cancelbut")
-//                viewModel.deleteLocation(item)
+                val currentTime = Calendar.getInstance()
+                val reservationTime = Calendar.getInstance()
+
+                reservationTime.time = sdf.parse(item.startTime)
+                Log.d(TAG, "current: ${currentTime.time}")
+                Log.d(TAG, "given: ${reservationTime.time}")
+                reservationTime.add(Calendar.HOUR, -3)
+                Log.d(TAG, "given minus 3: ${reservationTime.time}")
+
+                if (currentTime >= reservationTime){
+                    val message = "Sorry, you cannot cancel within 3 hours of your reservation"
+                    Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    val message = "Reservation canceled"
+                    Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
+                    viewModel.deleteReservation(item)
+                }
             }
 
             cancelButSure.setOnLongClickListener {
                 Log.i(TAG,"click - delbutsure")
-//                viewModel.deleteLocation(item)
+                viewModel.deleteReservation(item)
                 true
             }
 
             contactBut.setOnClickListener {
-                Log.i(TAG,"click - delbutsure")
+                Log.i(TAG,"click - contactBut")
+                val navHostFragment = (itemView.context as FragmentActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                val navController = navHostFragment.navController
+                navController.navigate(R.id.navigation_chat)
+            }
+
+            routeBut.setOnClickListener {
+                db
+                    .collection("locations")
+                    .document(item.locationId!!)
+                    .get()
+                    .addOnSuccessListener {
+                        val address = it.getString("address")
+                        val gmmIntentUri =
+                                Uri.parse("geo:0,0?q=$address")
+                        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                        mapIntent.setPackage("com.google.android.apps.maps")
+                        itemView.context.startActivity(mapIntent)
+                    }
             }
 
 
