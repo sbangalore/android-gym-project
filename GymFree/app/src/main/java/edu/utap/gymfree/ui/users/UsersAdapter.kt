@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +33,6 @@ class UsersAdapter(private var viewModel: UsersViewModel)
         override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
             return oldItem.uId == newItem.uId
                     && oldItem.name == newItem.name
-                    && oldItem.lastMessageTime == newItem.lastMessageTime
         }
     }
 
@@ -40,15 +40,17 @@ class UsersAdapter(private var viewModel: UsersViewModel)
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // May the Lord have mercy upon my soul
         private var nameText = itemView.findViewById<TextView>(R.id.nameText)
-        private var timeText = itemView.findViewById<TextView>(R.id.timeText)
 
         private fun bindElements(item: User,
-                                 nameText: TextView,
-                                 timeText: TextView
+                                 nameText: TextView
         ) {
             Log.i(TAG, item.toString())
             nameText.text = item.name
-            timeText.text = item.lastMessageTime.toString()
+//            nameText.setOnClickListener {
+//                val navHostFragment = (itemView.context as FragmentActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+//                val navController = navHostFragment.navController
+//                navController.navigate(R.id.navigation_chat)
+//            }
         }
 
         fun bind(item: User?) {
@@ -60,7 +62,6 @@ class UsersAdapter(private var viewModel: UsersViewModel)
             bindElements(
                     item,
                     nameText,
-                    timeText
             )
         }
     }

@@ -30,8 +30,8 @@
                 android:id="@+id/TimeslotsTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Members"
-                android:textSize="20sp"
+                android:text="Members:"
+                android:textSize="24sp"
                 android:layout_margin="8dp"
                 android:layout_marginTop="20dp"/>
 
