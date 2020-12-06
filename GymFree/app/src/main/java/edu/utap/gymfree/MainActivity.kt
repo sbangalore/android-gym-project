@@ -77,18 +77,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        navController.addOnDestinationChangedListener { controller, destination, arguments ->
-//            val count = supportFragmentManager.backStackEntryCount
-//            Log.d(TAG, "NAV CHANGED: $count")
-//            if (count != 0){
-//                Log.d(TAG, "~~POPPED")
-//                supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//                supportFragmentManager.popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//            }
-//        }
         createSignInIntent()
-
-
 
     }
 
@@ -174,22 +163,8 @@ class MainActivity : AppCompatActivity() {
     fun updateUI(currentUser: FirebaseUser?){
         if (currentUser?.email.equals(resources.getString(R.string.owner_email))) {
             Log.i(TAG, "Owner signed in")
-
-
-//            fab.setOnClickListener {
-//                supportFragmentManager
-//                    .beginTransaction()
-//                    .add(R.id.nav_host_fragment, CreateFragment.newInstance())
-//                    .addToBackStack(null)
-//                    .commit()
-//            }
-
         } else {
-//            Log.d(TAG, "member user")
-//            supportFragmentManager
-//                    .beginTransaction()
-//                    .replace(R.id.nav_host_fragment, SelectFragment.newInstance())
-//                    .commit()
+            Log.i(TAG, "Member signed in")
         }
     }
     override fun onBackPressed(){
@@ -203,20 +178,5 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
-
-//
-//    override fun onBackPressed(){
-//        val count = supportFragmentManager.backStackEntryCount
-//        Log.d(TAG, "~~BACK WAS PRESSED: $count")
-//        if (count != 0){
-//            Log.d(TAG, "~~POPPED")
-//            supportFragmentManager.popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//            supportFragmentManager.popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//        }
-//        else{
-//            super.onBackPressed()
-//        }
-//    }
-
 
 }
