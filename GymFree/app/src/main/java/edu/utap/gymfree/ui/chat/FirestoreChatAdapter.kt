@@ -42,42 +42,33 @@ class FirestoreChatAdapter(private var viewModel: ChatViewModel)
     // ViewHolder pattern minimizes calls to findViewById
     inner class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // May the Lord have mercy upon my soul
-        private var myUserTV = itemView.findViewById<TextView>(R.id.chatUserTV)
         private var myTimeTV = itemView.findViewById<TextView>(R.id.chatTimeTV)
         private var myTextTV = itemView.findViewById<TextView>(R.id.chatTextTV)
         private var myTextCV = itemView.findViewById<CardView>(R.id.textCV)
-        private var myPicIV = itemView.findViewById<ImageView>(R.id.picIV)
-        private var otherUserTV = itemView.findViewById<TextView>(R.id.otherChatUserTV)
         private var otherTimeTV = itemView.findViewById<TextView>(R.id.otherChatTimeTV)
         private var otherTextTV = itemView.findViewById<TextView>(R.id.otherChatTextTV)
         private var otherTextCV = itemView.findViewById<CardView>(R.id.otherTextCV)
-        private var otherPicIV = itemView.findViewById<ImageView>(R.id.otherPicIV)
         init {
             myTextCV.isLongClickable = true
         }
-        private fun goneElements(userTV: TextView, timeTV: TextView, textTV: TextView,
-                                 textCV: CardView, picIV: ImageView) {
-            userTV.visibility = View.GONE
+        private fun goneElements(timeTV: TextView, textTV: TextView,
+                                 textCV: CardView) {
             timeTV.visibility = View.GONE
             textTV.visibility = View.GONE
             textCV.visibility = View.GONE
-            picIV.visibility = View.GONE
         }
-        private fun visibleElements(userTV: TextView, timeTV: TextView, textTV: TextView,
-                                 textCV: CardView, picIV: ImageView) {
-            userTV.visibility = View.VISIBLE
+        private fun visibleElements(timeTV: TextView, textTV: TextView,
+                                 textCV: CardView) {
             timeTV.visibility = View.VISIBLE
             textTV.visibility = View.VISIBLE
             textCV.visibility = View.VISIBLE
-            picIV.visibility = View.VISIBLE
         }
         private fun bindElements(item: ChatRow, backgroundColor: Int, textColor: Int,
-                                 userTV: TextView, timeTV: TextView, textTV: TextView,
-                                 textCV: CardView, picIV: ImageView) {
+                                 timeTV: TextView, textTV: TextView,
+                                 textCV: CardView) {
             // Set background on CV, not TV because...layout is weird
             textCV.setCardBackgroundColor(backgroundColor)
             textTV.setTextColor(textColor)
-            userTV.text = item.name
             textTV.text = item.message
             textCV.setOnLongClickListener {
                 viewModel.deleteChatRow(item)
@@ -100,17 +91,17 @@ class FirestoreChatAdapter(private var viewModel: ChatViewModel)
         fun bind(item: ChatRow?) {
             if (item == null) return
             if (viewModel.myUid() == item.ownerUid) {
-                goneElements(otherUserTV, otherTimeTV, otherTextTV, otherTextCV, otherPicIV)
-                visibleElements(myUserTV, myTimeTV, myTextTV, myTextCV, myPicIV)
+                goneElements(otherTimeTV, otherTextTV, otherTextCV)
+                visibleElements(myTimeTV, myTextTV, myTextCV)
                 bindElements(
                     item, iphoneTextBlue, Color.WHITE,
-                    myUserTV, myTimeTV, myTextTV, myTextCV, myPicIV)
+                    myTimeTV, myTextTV, myTextCV)
             } else {
-                goneElements(myUserTV, myTimeTV, myTextTV, myTextCV, myPicIV)
-                visibleElements(otherUserTV, otherTimeTV, otherTextTV, otherTextCV, otherPicIV)
+                goneElements(myTimeTV, myTextTV, myTextCV)
+                visibleElements(otherTimeTV, otherTextTV, otherTextCV)
                 bindElements(
                     item, dimGrey, Color.BLACK,
-                    otherUserTV, otherTimeTV, otherTextTV, otherTextCV, otherPicIV)
+                    otherTimeTV, otherTextTV, otherTextCV)
             }
         }
     }
