@@ -84,7 +84,6 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                                  cancelButSure: com.google.android.material.button.MaterialButton,
                                  contactBut: com.google.android.material.button.MaterialButton,
                                  routeBut: com.google.android.material.button.MaterialButton,
-                                 reservationList: RecyclerView
         ) {
             Log.i("XXX-ADAPTER-bindels", item.toString())
             val loc = db.collection("locations").document(item.locationId!!).get()
@@ -156,7 +155,7 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                     val message = "Reservation canceled"
                     Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
                     viewModel.deleteReservation(item)
-                    notifyItemRemoved(adapterPosition)
+
                 }
             }
 
@@ -178,8 +177,8 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                     val message = "Reservation canceled"
                     Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
                     viewModel.deleteReservation(item)
-                    notifyItemRemoved(adapterPosition)
                 }
+
                 true
             }
 
@@ -215,7 +214,6 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
             contactBut.visibility = View.VISIBLE
             routeBut.visibility = View.VISIBLE
             cancelButSure.visibility = View.GONE
-            reservationList.visibility = View.GONE
         }
 
         fun bind(item: Reservation?) {
@@ -232,8 +230,7 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                     cancelBut,
                     cancelButSure,
                     contactBut,
-                    routeBut,
-                    reservationList
+                    routeBut
             )
         }
     }
