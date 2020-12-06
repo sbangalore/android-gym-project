@@ -1,5 +1,6 @@
 package edu.utap.gymfree.ui.dashboard_member
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,6 +45,8 @@ class DashboardFragment : Fragment() {
 
         initRecyclerView()
         viewModel.getReservations()
+
+        titleText.text = "Your Reservations"
 
         viewModel.observeReservations().observe(viewLifecycleOwner, Observer {
             Log.d(javaClass.simpleName, "Observe Reservations $it")
@@ -93,8 +96,6 @@ class DashboardFragment : Fragment() {
                     }
                 }
         }
-
-
     }
 
     override fun onResume() {
