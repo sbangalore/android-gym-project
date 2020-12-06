@@ -69,6 +69,7 @@ class DashboardFragment : Fragment() {
 
         // NOTE: AFAIK, the admin SDK has to be handled through a seperate app entirely
         //       => we can't remove or add users here
+        // failed attepts at deleting users
 
 //        addUserButton.setOnClickListener {
 //            val emailToAdd = addEmail.editText?.text.toString()

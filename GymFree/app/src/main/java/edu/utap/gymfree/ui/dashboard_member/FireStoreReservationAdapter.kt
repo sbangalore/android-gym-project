@@ -117,7 +117,7 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
             timeslotTV.text = tslot
 
             cancelBut.setOnClickListener {
-                Log.i(TAG,"longclick - delbut")
+                Log.i(TAG,"cancelbut - delbut")
                 cancelBut.visibility = View.GONE
                 cancelButSure.visibility = View.VISIBLE
                 Handler().postDelayed(Runnable {
@@ -156,12 +156,30 @@ class FireStoreReservationAdapter(private var viewModel: DashboardViewModel)
                     val message = "Reservation canceled"
                     Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
                     viewModel.deleteReservation(item)
+                    notifyItemRemoved(adapterPosition)
                 }
             }
 
             cancelButSure.setOnLongClickListener {
-                Log.i(TAG,"click - delbutsure")
-                viewModel.deleteReservation(item)
+                val currentTime = Calendar.getInstance()
+                val reservationTime = Calendar.getInstance()
+
+                reservationTime.time = sdf.parse(item.startTime)
+                Log.d(TAG, "current: ${currentTime.time}")
+                Log.d(TAG, "given: ${reservationTime.time}")
+                reservationTime.add(Calendar.HOUR, -3)
+                Log.d(TAG, "given minus 3: ${reservationTime.time}")
+
+                if (currentTime >= reservationTime){
+                    val message = "Sorry, you cannot cancel within 3 hours of your reservation"
+                    Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    val message = "Reservation canceled"
+                    Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
+                    viewModel.deleteReservation(item)
+                    notifyItemRemoved(adapterPosition)
+                }
                 true
             }
 

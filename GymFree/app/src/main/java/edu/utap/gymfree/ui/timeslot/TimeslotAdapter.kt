@@ -110,9 +110,7 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
                                         .supportFragmentManager
                                         .popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
-//                                (itemView.context as FragmentActivity)
-//                                        .supportFragmentManager
-//                                        .popBackStack("users", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
 
                                 Log.d(TAG, "POPPED")
                             }
@@ -148,15 +146,6 @@ class TimeslotAdapter(private var viewModel: TimeslotViewModel)
 
 //            rowText.visibility = View.VISIBLE
 
-//            bookBut.setOnClickListener {
-//                Log.d(TAG, "XXX clicked on book, timeslot: ${item.rowId}")
-//                val locID = viewModel.observeLocID().value
-//                viewModel.addReservation(item, locID!!)
-//                (itemView.context as FragmentActivity)
-//                        .supportFragmentManager
-//                        .popBackStack("select", FragmentManager.POP_BACK_STACK_INCLUSIVE)
-//                Log.d(TAG, "POPPED")
-//            }
 
         }
 

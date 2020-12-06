@@ -41,43 +41,43 @@ class DashboardViewModel : ViewModel() {
 
     fun deleteLocation(location: Location) {
         db
-                .collection("locations")
-                .document(location.rowID)
-                .collection("timeslots")
-                .get()
-                .addOnSuccessListener { timeslots ->
-                    for (time in timeslots) {
-                        val timeID = time.getString("rowId")
-                        if (timeID != null) {
-                            db.collection("locations")
-                                    .document(location.rowID)
-                                    .collection("timeslots")
-                                    .document(timeID)
-                                    .collection("reservations")
-                                    .get()
-                                    .addOnSuccessListener { reservations ->
-                                        for (reservation in reservations) {
-                                            val resID = reservation.getString("userId")
-                                            if (resID != null) {
-                                                db.collection("locations")
-                                                        .document(location.rowID)
-                                                        .collection("timeslots")
-                                                        .document(timeID)
-                                                        .collection("reservations")
-                                                        .document(resID)
-                                                        .delete()
-                                            }
+            .collection("locations")
+            .document(location.rowID)
+            .collection("timeslots")
+            .get()
+            .addOnSuccessListener { timeslots ->
+                for (time in timeslots) {
+                    val timeID = time.getString("rowId")
+                    if (timeID != null) {
+                        db.collection("locations")
+                                .document(location.rowID)
+                                .collection("timeslots")
+                                .document(timeID)
+                                .collection("reservations")
+                                .get()
+                                .addOnSuccessListener { reservations ->
+                                    for (reservation in reservations) {
+                                        val resID = reservation.getString("userId")
+                                        if (resID != null) {
+                                            db.collection("locations")
+                                                .document(location.rowID)
+                                                .collection("timeslots")
+                                                .document(timeID)
+                                                .collection("reservations")
+                                                .document(resID)
+                                                .delete()
                                         }
                                     }
+                                }
 
-                            db.collection("locations")
-                                    .document(location.rowID)
-                                    .collection("timeslots")
-                                    .document(timeID)
-                                    .delete()
-                        }
+                        db.collection("locations")
+                            .document(location.rowID)
+                            .collection("timeslots")
+                            .document(timeID)
+                            .delete()
                     }
                 }
+            }
 
         db.collection("locations")
                 .document(location.rowID)

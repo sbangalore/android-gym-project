@@ -137,28 +137,6 @@ class FireStoreLocationAdapter(private var viewModel: DashboardViewModel)
             delButSure.visibility = View.GONE
             guestList.visibility = View.GONE
 
-//            val timeslots = db
-//                    .collection("locations")
-//                    .document(item.rowID)
-//                    .collection("timeslots")
-//                    .orderBy("startTime", Query.Direction.ASCENDING)
-//                    .get()
-//                    .addOnSuccessListener { documents ->
-//                        for (document in documents) {
-//                            Log.d(TAG, "${document.id} => ${document.data}")
-//                        }
-//                    }
-//                    .addOnFailureListener { exception ->
-//                        Log.w(TAG, "Error getting documents: ", exception)
-//                    }
-
-//            val numReservations = timeslots
-//                    .document(item.rowId)
-//                    .collection("reservations")
-//                    .get()
-//                    .toString()
-
-//            guestListButton.text = numReservations
         }
 
         fun bind(item: Location?) {

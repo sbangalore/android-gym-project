@@ -46,6 +46,7 @@ class UsersAdapter(private var viewModel: UsersViewModel)
         ) {
             Log.i(TAG, item.toString())
             nameText.text = item.name
+            // throws error
 //            nameText.setOnClickListener {
 //                val navHostFragment = (itemView.context as FragmentActivity).supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 //                val navController = navHostFragment.navController
